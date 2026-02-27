@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trang chủ - Foody Recommend</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .hero-section {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+        }
+        .category-icon {
+            width: 60px; height: 60px;
+            background: #fff; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin: 0 auto 10px; transition: transform 0.2s;
+            color: #ee4d2d; font-size: 24px;
+        }
+        .category-item:hover .category-icon { transform: translateY(-5px); background: #ee4d2d; color: #fff; }
+        .card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.3s; }
+        .card-img-top { height: 160px; object-fit: cover; }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-danger" href="home.html">FOODY RECOMMEND</a>
+            <div class="d-flex align-items-center">
+                <span class="me-3 text-muted">Xin chào, <b>User</b></span>
+                <a href="login.html" class="btn btn-sm btn-outline-secondary">Đăng xuất</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <h1 class="display-4 fw-bold mb-3">Hôm nay bạn muốn ăn gì?</h1>
+        <p class="fs-5 mb-4">Khám phá hàng ngàn địa điểm ăn uống & nhận gợi ý phù hợp nhất</p>
+        <div class="bg-white p-2 rounded-pill shadow w-50 d-flex">
+            <input type="text" class="form-control border-0 rounded-pill px-4" placeholder="Nhập tên món ăn, nhà hàng...">
+            <button class="btn btn-danger rounded-pill px-4 fw-bold">TÌM KIẾM</button>
+        </div>
+    </section>
+
+    <div class="container my-5">
+        <h4 class="fw-bold mb-4 border-start border-4 border-danger ps-3">Danh mục phổ biến</h4>
+        <div class="row text-center">
+            <div class="col-6 col-md-2 category-item cursor-pointer">
+                <div class="category-icon"><i class="fas fa-utensils"></i></div>
+                <h6>Cơm</h6>
+            </div>
+            <div class="col-6 col-md-2 category-item">
+                <div class="category-icon"><i class="fas fa-bowl-food"></i></div>
+                <h6>Phở / Bún</h6>
+            </div>
+            <div class="col-6 col-md-2 category-item">
+                <div class="category-icon"><i class="fas fa-coffee"></i></div>
+                <h6>Đồ uống</h6>
+            </div>
+            <div class="col-6 col-md-2 category-item">
+                <div class="category-icon"><i class="fas fa-pizza-slice"></i></div>
+                <h6>Ăn vặt</h6>
+            </div>
+            <div class="col-6 col-md-2 category-item">
+                <div class="category-icon"><i class="fas fa-leaf"></i></div>
+                <h6>Chay</h6>
+            </div>
+            <div class="col-6 col-md-2 category-item">
+                <div class="category-icon"><i class="fas fa-bread-slice"></i></div>
+                <h6>Bánh mỳ</h6>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mb-5">
+        <h4 class="fw-bold mb-4 border-start border-4 border-danger ps-3">Địa điểm nổi bật hôm nay</h4>
+        <div class="row row-cols-1 row-cols-md-4 g-4">
+            
+            <div class="col">
+                <a href="index.html" class="text-decoration-none text-dark">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title fw-bold">Phở Gia Truyền Bát Đàn</h6>
+                            <p class="small text-muted mb-1">📍 Hoàn Kiếm, Hà Nội</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success">4.5 <i class="fas fa-star small"></i></span>
+                                <span class="text-danger fw-bold small">40k - 60k</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col">
+                <a href="index.html" class="text-decoration-none text-dark">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title fw-bold">Cơm Tấm Sài Gòn</h6>
+                            <p class="small text-muted mb-1">📍 Quận 1, TP.HCM</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success">4.2 <i class="fas fa-star small"></i></span>
+                                <span class="text-danger fw-bold small">35k - 50k</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col">
+                <a href="index.html" class="text-decoration-none text-dark">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1544025162-d76690b68603?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title fw-bold">Buffet Lẩu Nướng BBQ</h6>
+                            <p class="small text-muted mb-1">📍 Cầu Giấy, Hà Nội</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success">4.8 <i class="fas fa-star small"></i></span>
+                                <span class="text-danger fw-bold small">199k - 299k</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col">
+                <a href="index.html" class="text-decoration-none text-dark">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="...">
+                        <div class="card-body">
+                            <h6 class="card-title fw-bold">Highlands Coffee</h6>
+                            <p class="small text-muted mb-1">📍 Đống Đa, Hà Nội</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="badge bg-success">4.0 <i class="fas fa-star small"></i></span>
+                                <span class="text-danger fw-bold small">29k - 65k</span>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+        
+        <div class="text-center mt-4">
+            <button class="btn btn-outline-danger px-5 rounded-pill">Xem tất cả địa điểm</button>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4">
+        <p class="mb-0">© 2026 Đồ án Hệ thống Gợi ý Món ăn - SV Thực hiện: [Tên Bạn]</p>
+    </footer>
+
+</body>
+</html>
