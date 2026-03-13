@@ -1,0 +1,44 @@
+package com.example.foodyrecommender.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+@Entity
+@Table(name = "reservations")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class Reservation {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
+
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "restaurant_id")
+    private Long restaurantId;
+
+    @Column(name = "booking_date")
+    private LocalDate bookingDate;
+
+    @Column(name="booking_time")
+    private LocalTime bookingTime;
+
+    @Column(name="party_size")
+    private Integer partySize;
+
+    @Column(name = "status")
+    private String status; // e.g., "CONFIRMED", "CANCELLED", "PENDING"
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+}
