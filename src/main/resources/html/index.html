@@ -189,117 +189,72 @@
                     <div class="card-body">
                         <h5 class="card-title text-muted text-uppercase small">Phở / Món nước</h5>
                         <h1 class="restaurant-title">Phở Gia Truyền Bát Đàn</h1>
-                        <p class="card-text text-warning">
-                            ★★★★☆ <span class="text-muted">(4.5/5 - 120 đánh giá)</span>
-                        </p>
                         <p class="card-text">
                             📍 <strong>Địa chỉ:</strong> 49 Bát Đàn, Hoàn Kiếm, Hà Nội <br>
                             💰 <strong>Giá:</strong> 40.000đ - 60.000đ <br>
-                            🕒 <strong>Mở cửa:</strong> 06:00 - 11:00 | 18:00 - 22:00
+                            🏷️ <strong>Loại:</strong> Phở
                         </p>
                         <hr>
-                        <p class="card-text fst-italic text-secondary">
+                        <p class="card-text fst-italic text-secondary" id="restaurantDescription">
                             "Nước dùng ngọt thanh đặc trưng, thịt bò tái mềm tươi ngon. Quán phở lâu đời chuẩn vị Hà Nội xưa, không gian hoài cổ..."
                         </p>
-                        <button class="btn btn-danger btn-lg px-4" id ="openOrder">Đặt món ngay</button>
+                        <button class="btn btn-danger btn-lg px-4" id ="openOrder">Đặt bàn ngay</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <h3 class="section-title">Thực đơn nổi bật</h3>
-        <div class="row row-cols-2 row-cols-md-4 g-4">
-            <div class="col">
-                <div class="border rounded p-2 text-center bg-white">
-                    <h6>Phở Tái</h6>
-                    <span class="text-danger fw-bold">45.000đ</span>
+        <h3 class="section-title">Thông tin chi tiết về nhà hàng</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Tên nhà hàng</h5>
+                        <p id="detailName" class="card-text text-danger fw-bold">Phở Gia Truyền Bát Đàn</p>
+                    </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="border rounded p-2 text-center bg-white">
-                    <h6>Phở Chín</h6>
-                    <span class="text-danger fw-bold">45.000đ</span>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-2 text-center bg-white">
-                    <h6>Phở Tái Nạm</h6>
-                    <span class="text-danger fw-bold">50.000đ</span>
-                </div>
-            </div>
-            <div class="col">
-                <div class="border rounded p-2 text-center bg-white">
-                    <h6>Quẩy (3 cái)</h6>
-                    <span class="text-danger fw-bold">10.000đ</span>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Loại hình</h5>
+                        <p id="detailCategory" class="card-text">Phở</p>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="mt-5 mb-5 p-4 rounded" style="background-color: #fff5f5; border: 1px dashed #ee4d2d;">
-            <h3 class="section-title text-danger">❤️ CÓ THỂ BẠN CŨNG THÍCH (AI Suggestion)</h3>
-            <p class="text-muted mb-4">Dựa trên món ăn và hương vị của quán bạn đang xem, hệ thống gợi ý các quán sau:</p>
-            
-            <div class="row row-cols-1 row-cols-md-4 g-4">
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="position-relative">
-                            <img src="https://images.unsplash.com/photo-1541095058489-41bc8be275a8?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="...">
-                            <span class="similarity-score">Giống 92%</span>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Phở Thìn Lò Đúc</h5>
-                            <p class="card-text small text-muted">📍 13 Lò Đúc, Hai Bà Trưng</p>
-                            <a href="#" class="btn btn-sm btn-outline-danger w-100">Xem chi tiết</a>
-                        </div>
+        <div class="row mt-3">
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Địa chỉ</h5>
+                        <p id="detailAddress" class="card-text">49 Bát Đàn, Hoàn Kiếm, Hà Nội</p>
                     </div>
                 </div>
-
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="position-relative">
-                            <img src="https://images.unsplash.com/photo-1631515243349-e06036043944?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="...">
-                            <span class="similarity-score">Giống 85%</span>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Phở 10 Lý Quốc Sư</h5>
-                            <p class="card-text small text-muted">📍 10 Lý Quốc Sư, Hoàn Kiếm</p>
-                            <a href="#" class="btn btn-sm btn-outline-danger w-100">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="position-relative">
-                            <img src="https://images.unsplash.com/photo-1519624213695-a682885973c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="...">
-                            <span class="similarity-score">Giống 78%</span>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Bún Bò Huế O Xuân</h5>
-                            <p class="card-text small text-muted">📍 Quang Trung, Hoàn Kiếm</p>
-                            <a href="#" class="btn btn-sm btn-outline-danger w-100">Xem chi tiết</a>
-                        </div>
-                    </div>
-                </div>
-                 <div class="col">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="position-relative">
-                            <img src="https://images.unsplash.com/photo-1555126634-323283e090fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" class="card-img-top" alt="...">
-                            <span class="similarity-score">Giống 65%</span>
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Cơm Rang Dưa Bò</h5>
-                            <p class="card-text small text-muted">📍 Tống Duy Tân</p>
-                            <a href="#" class="btn btn-sm btn-outline-danger w-100">Xem chi tiết</a>
-                        </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Mức giá</h5>
+                        <p id="detailPrice" class="card-text text-danger fw-bold">40k - 60k</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <div class="mt-5 mb-5 p-4 rounded" style="background-color: #fff5f5; border: 1px dashed #ee4d2d;">
+        <h3 class="section-title text-danger">❤️ CÓ THỂ BẠN CŨNG THÍCH</h3>
+        <p class="text-muted mb-4">Các nhà hàng tương tự mà bạn có thể quan tâm:</p>
+
+        <div class="row row-cols-1 row-cols-md-4 g-4" id="suggestedRestaurants">
+            <!-- Danh sách gợi ý sẽ được load tại đây -->
+        </div>
+    </div>
+
     <footer class="bg-dark text-white text-center py-3 mt-5">
-        <p class="mb-0">© 2026 Đồ án Hệ thống Gợi ý Món ăn - SV Thực hiện: [Tên Bạn]</p>
+        <p class="mb-0">© 2026 Đồ án Hệ thống Gợi ý Món ăn</p>
     </footer>
 
     <!-- Order Modal -->
@@ -307,46 +262,213 @@
     <div id="orderModal" class="custom-modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2 class="modal-title">Đặt món</h2>
-            <p class="modal-subtitle">Điền đầy đủ thông tin để đặt món</p>
-            <form action="/order" method="post">
+            <h2 class="modal-title">Đặt bàn</h2>
+            <p class="modal-subtitle">Điền đầy đủ thông tin để đặt bàn</p>
+            <form id="reservationForm">
                 <div class="form-group">
-                    <label for="address">Địa chỉ</label>
-                    <input type="text" id="address" name="address" placeholder="Số nhà, Đường, Phường, Quận (Huyện)" required>
+                    <label for="bookingDate">Ngày đặt</label>
+                    <input type="date" id="bookingDate" name="bookingDate" required>
                 </div>
                 <div class="form-group">
-                    <label for="name">Tên món</label>
-                    <input type="text" id="name" name="name" placeholder="Nhập tên món" required>
+                    <label for="bookingTime">Giờ đặt</label>
+                    <input type="time" id="bookingTime" name="bookingTime" required>
                 </div>
                 <div class="form-group">
-                    <label for="quantity">Số lượng</label>
-                    <input type="number" id="quantity" name="quantity" placeholder="Nhập số lượng" required>
+                    <label for="partySize">Số người</label>
+                    <input type="number" id="partySize" name="partySize" min="1" placeholder="Nhập số người" required>
+                </div>
+                <div class="form-group">
+                    <label for="phoneNumber">Số điện thoại liên hệ</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" placeholder="Nhập số điện thoại" required>
                 </div>
                 <div class="form-group">
                     <label for="note">Ghi chú</label>
-                    <input type="text" id="note" name="note" placeholder="Nhập ghi chú" required>
+                    <input type="text" id="note" name="note" placeholder="Nhập ghi chú (không bắt buộc)">
                 </div>
-                <button type="submit" class="btn-submit">Đặt món</button>
+                <button type="submit" class="btn-submit">Đặt bàn</button>
+                <p class="text-muted small mt-3 text-center">
+                    <i class="fas fa-info-circle"></i> Chúng tôi sẽ gọi xác nhận đặt bàn trong vòng 30 phút
+                </p>
             </form>
         </div>
     </div>
+
 </body>
 <script>
+    // Mock data - dữ liệu giả
+    const mockRestaurants = [
+        {
+            id: 1,
+            name: 'Phở Gia Truyền Bát Đàn',
+            category: 'Phở',
+            description: 'Nước dùng ngọt thanh đặc trưng, thịt bò tái mềm tươi ngon. Quán phở lâu đời chuẩn vị Hà Nội xưa, không gian hoài cổ...',
+            address: '49 Bát Đàn, Hoàn Kiếm, Hà Nội',
+            priceAverage: '40k - 60k',
+            imageUrl: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+            id: 2,
+            name: 'Cơm Tấm Sài Gòn',
+            category: 'Cơm',
+            description: 'Cơm tấm chất lượng cao, topping đa dạng và thơm ngon. Quán ăn gia đình, phục vụ tận tâm...',
+            address: 'Quận 1, TP.HCM',
+            priceAverage: '35k - 50k',
+            imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+            id: 3,
+            name: 'Buffet Lẩu Nướng BBQ',
+            category: 'Lẩu',
+            description: 'Buffet tự chọn với menu đa dạng, thịt tươi ngon, dịch vụ chuyên nghiệp...',
+            address: 'Cầu Giấy, Hà Nội',
+            priceAverage: '199k - 299k',
+            imageUrl: 'https://images.unsplash.com/photo-1544025162-d76690b68603?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+            id: 4,
+            name: 'Highlands Coffee',
+            category: 'Đồ uống',
+            description: 'Cà phê chất lượng cao, không gian thoải mái, thích hợp làm việc hay gặp bạn bè...',
+            address: 'Đống Đa, Hà Nội',
+            priceAverage: '29k - 65k',
+            imageUrl: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+            id: 5,
+            name: 'Bún Bò Huế O Xuân',
+            category: 'Bún',
+            description: 'Bún bò Huế authentic, nước dùng đậm đà, topping đủ loại...',
+            address: 'Quang Trung, Hoàn Kiếm',
+            priceAverage: '45k - 65k',
+            imageUrl: 'https://images.unsplash.com/photo-1519624213695-a682885973c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        },
+        {
+            id: 6,
+            name: 'Phở 10 Lý Quốc Sư',
+            category: 'Phở',
+            description: 'Phở truyền thống Hà Nội, thịt bò tái tươi ngon, nước dùng đặc trưng...',
+            address: '10 Lý Quốc Sư, Hoàn Kiếm',
+            priceAverage: '40k - 55k',
+            imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+        }
+    ];
+
+    // ...existing code...
+
+    function loadRestaurantDetail(id) {
+        const restaurant = mockRestaurants.find(r => r.id == id);
+
+        if (!restaurant) {
+            alert('Nhà hàng không tìm thấy!');
+            window.location.href = 'home.html';
+            return;
+        }
+
+        // ...existing code...
+
+        // Cập nhật thông tin trong card chính
+        const mainInfo = document.querySelectorAll('.card-body .card-text')[0];
+        mainInfo.innerHTML = `
+            📍 <strong>Địa chỉ:</strong> ${restaurant.address} <br>
+            💰 <strong>Giá:</strong> ${restaurant.priceAverage} <br>
+            🏷️ <strong>Loại:</strong> ${restaurant.category}
+        `;
+
+        // Load danh sách gợi ý - các nhà hàng cùng category
+        loadSuggestedRestaurants(restaurant.category, id);
+    }
+
+    function loadSuggestedRestaurants(category, currentId) {
+        const container = document.getElementById('suggestedRestaurants');
+        const suggested = mockRestaurants.filter(r => r.category === category && r.id != currentId).slice(0, 4);
+
+        container.innerHTML = '';
+
+        if (suggested.length === 0) {
+            container.parentElement.style.display = 'none';
+            return;
+        }
+
+        suggested.forEach(restaurant => {
+            const card = `
+                <div class="col">
+                    <a href="index.html?id=${restaurant.id}" class="text-decoration-none">
+                        <div class="card h-100 shadow-sm border-0">
+                            <img src="${restaurant.imageUrl}" class="card-img-top" alt="${restaurant.name}">
+                            <div class="card-body">
+                                <h5 class="card-title fw-bold">${restaurant.name}</h5>
+                                <p class="card-text small text-muted mb-2">📍 ${restaurant.address}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-info text-dark">${restaurant.category}</span>
+                                    <span class="text-danger fw-bold small">${restaurant.priceAverage}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `;
+            container.innerHTML += card;
+        });
+    }
+
+    // Xử lý modal đặt bàn
     const openBtn = document.getElementById("openOrder");
     const modal = document.getElementById("orderModal");
     const overlay = document.getElementById("overlay");
     const closeBtn = document.querySelector(".close");
+
     openBtn.onclick = function() {
         modal.style.display = "block";
         overlay.style.display = "block";
     }
+
     closeBtn.onclick = function() {
         modal.style.display = "none";
         overlay.style.display = "none";
     }
+
     overlay.onclick = function() {
         modal.style.display = "none";
         overlay.style.display = "none";
     }
+
+    // Xử lý form đặt bàn
+    document.getElementById('reservationForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (!restaurantId) {
+            alert('Lỗi: Không tìm thấy nhà hàng');
+            return;
+        }
+
+        const userId = localStorage.getItem('userId');
+        if (!userId) {
+            alert('Vui lòng đăng nhập trước');
+            window.location.href = 'login.html';
+            return;
+        }
+
+        const reservation = {
+            id: mockReservations.length + 1,
+            userId: userId,
+            restaurantId: restaurantId,
+            bookingDate: document.getElementById('bookingDate').value,
+            bookingTime: document.getElementById('bookingTime').value,
+            partySize: document.getElementById('partySize').value,
+            phoneNumber: document.getElementById('phoneNumber').value,
+            note: document.getElementById('note').value,
+            status: 'PENDING',
+            createdAt: new Date().toISOString()
+        };
+
+        mockReservations.push(reservation);
+        localStorage.setItem('mockReservations', JSON.stringify(mockReservations));
+
+        alert(`Đặt bàn thành công!\n\nChúng tôi sẽ gọi số điện thoại ${reservation.phoneNumber} để xác nhận đặt bàn của bạn trong vòng 30 phút.`);
+        modal.style.display = "none";
+        overlay.style.display = "none";
+        document.getElementById('reservationForm').reset();
+    });
 </script>
+
 </html>

@@ -39,19 +39,22 @@
         <h2 class="fw-bold text-danger mb-4">FOODY RECOMMEND</h2>
         <p class="text-muted mb-4">Đăng nhập để nhận gợi ý món ngon!</p>
 
-        <form action="home.html"> <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="floatingInput" placeholder="Tên đăng nhập" value="user" required>
-                <label for="floatingInput">Tên đăng nhập</label>
+        <form id="loginForm">
+            <div class="form-floating mb-3">
+                <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" required>
+                <label for="username">Tên đăng nhập</label>
             </div>
             <div class="form-floating mb-4">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Mật khẩu" value="123456" required>
-                <label for="floatingPassword">Mật khẩu</label>
+                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" required>
+                <label for="password">Mật khẩu</label>
             </div>
+
+            <div id="errorMsg" class="alert alert-danger d-none" role="alert"></div>
 
             <button type="submit" class="btn btn-primary-custom w-100 mb-3">ĐĂNG NHẬP</button>
             
             <div class="d-flex justify-content-center text-small">
-                <a href="signup.html" style ="text-align: center  ;"
+                <a href="signup.html" style="text-align: center;"
                 class="d-block text-center text-danger fw-bold mt-3">
                 Chưa có tài khoản? Đăng ký ngay
                 </a>           
@@ -59,15 +62,37 @@
         </form>
         
         <hr class="my-4">
-        <p class="small text-muted">Tài khoản demo: admin / user</p>
+        <p class="small text-muted">Tài khoản demo: user / 123456</p>
     </div>
 
 </body>
 <script>
-    document.querySelector('form').addEventListener('submit', function(e) {
+    // Mock data - dữ liệu giả
+    const mockUsers = [
+        { id: 1, username: 'user', password: '123456' },
+        { id: 2, username: 'admin', password: 'admin123' },
+        { id: 3, username: 'test', password: 'test123' }
+    ];
+
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        // Thêm logic xác thực nếu cần
-        window.location.href = 'home.html';
+
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Kiểm tra với mock data
+        const user = mockUsers.find(u => u.username === username && u.password === password);
+
+        if (user) {
+            localStorage.setItem('userId', user.id);
+            localStorage.setItem('username', user.username);
+            errorMsg.classList.add('d-none');
+            window.location.href = 'home.html';
+        } else {
+            errorMsg.textContent = 'Tên đăng nhập hoặc mật khẩu không chính xác!';
+            errorMsg.classList.remove('d-none');
+        }
     });
 </script>
 </html>

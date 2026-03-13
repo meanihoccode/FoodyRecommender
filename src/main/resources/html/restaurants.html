@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách nhà hàng - Foody Recommend</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+        }
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
+        }
+        .filter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .category-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f0f0f0;
+            border-radius: 20px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .category-badge.active {
+            background: #ee4d2d;
+            color: white;
+        }
+        .restaurant-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-danger" href="home.html">FOODY RECOMMEND</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="home.html">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="restaurants.html">Danh sách nhà hàng</a></li>
+                    <li class="nav-item">
+                        <span class="nav-link text-muted">Xin chào, <b id="username">User</b></span>
+                    </li>
+                    <li class="nav-item"><a href="#" id="logoutBtn" class="nav-link">Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section style="background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80'); background-size: cover; background-position: center; height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center;">
+        <h1 class="display-4 fw-bold mb-3">Danh sách nhà hàng</h1>
+        <p class="fs-5">Khám phá tất cả các nhà hàng và quán ăn tuyệt vời</p>
+    </section>
+
+    <div class="container mt-5">
+        <div class="filter-section">
+            <h5 class="mb-3">Lọc theo loại hình</h5>
+            <div id="categoryFilter">
+                <span class="category-badge active" data-category="all">Tất cả</span>
+                <span class="category-badge" data-category="Phở">Phở</span>
+                <span class="category-badge" data-category="Cơm">Cơm</span>
+                <span class="category-badge" data-category="Bún">Bún</span>
+                <span class="category-badge" data-category="Lẩu">Lẩu</span>
+                <span class="category-badge" data-category="Đồ uống">Đồ uống</span>
+            </div>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4" id="restaurantsContainer">
+            <!-- Danh sách nhà hàng sẽ được load tại đây -->
+        </div>
+
+        <div id="noResults" class="text-center text-muted mt-5" style="display: none;">
+            <p>Không có nhà hàng nào phù hợp với lựa chọn của bạn</p>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p class="mb-0">© 2026 Đồ án Hệ thống Gợi ý Món ăn</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Mock data - dữ liệu giả
+        const mockRestaurants = [
+            {
+                id: 1,
+                name: 'Phở Gia Truyền Bát Đàn',
+                category: 'Phở',
+                description: 'Nước dùng ngọt thanh đặc trưng, thịt bò tái mềm tươi ngon. Quán phở lâu đời chuẩn vị Hà Nội xưa, không gian hoài cổ...',
+                address: '49 Bát Đàn, Hoàn Kiếm, Hà Nội',
+                priceAverage: '40k - 60k',
+                imageUrl: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+            },
+            {
+                id: 2,
+                name: 'Cơm Tấm Sài Gòn',
+                category: 'Cơm',
+                description: 'Cơm tấm chất lượng cao, topping đa dạng và thơm ngon. Quán ăn gia đình, phục vụ tận tâm...',
+                address: 'Quận 1, TP.HCM',
+                priceAverage: '35k - 50k',
+                imageUrl: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+            },
+            {
+                id: 3,
+                name: 'Buffet Lẩu Nướng BBQ',
+                category: 'Lẩu',
+                description: 'Buffet tự chọn với menu đa dạng, thịt tươi ngon, dịch vụ chuyên nghiệp...',
+                address: 'Cầu Giấy, Hà Nội',
+                priceAverage: '199k - 299k',
+                imageUrl: 'https://images.unsplash.com/photo-1544025162-d76690b68603?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+            },
+            {
+                id: 4,
+                name: 'Highlands Coffee',
+                category: 'Đồ uống',
+                description: 'Cà phê chất lượng cao, không gian thoải mái, thích hợp làm việc hay gặp bạn bè...',
+                address: 'Đống Đa, Hà Nội',
+                priceAverage: '29k - 65k',
+                imageUrl: 'https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+            },
+            {
+                id: 5,
+                name: 'Bún Bò Huế O Xuân',
+                category: 'Bún',
+                description: 'Bún bò Huế authentic, nước dùng đậm đà, topping đủ loại...',
+                address: 'Quang Trung, Hoàn Kiếm',
+                priceAverage: '45k - 65k',
+                imageUrl: 'https://images.unsplash.com/photo-1519624213695-a682885973c7?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+            },
+            {
+                id: 6,
+                name: 'Phở 10 Lý Quốc Sư',
+                category: 'Phở',
+                description: 'Phở truyền thống Hà Nội, thịt bò tái tươi ngon, nước dùng đặc trưng...',
+                address: '10 Lý Quốc Sư, Hoàn Kiếm',
+                priceAverage: '40k - 55k',
+                imageUrl: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60'
+            }
+        ];
+
+        let currentFilter = 'all';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Kiểm tra đăng nhập
+            const username = localStorage.getItem('username');
+            const userId = localStorage.getItem('userId');
+
+            if (!username || !userId) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('username').textContent = username;
+
+            // Load danh sách nhà hàng
+            loadRestaurants('all');
+
+            // Xử lý lọc theo loại hình
+            document.querySelectorAll('.category-badge').forEach(badge => {
+                badge.addEventListener('click', function() {
+                    document.querySelectorAll('.category-badge').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.category;
+                    loadRestaurants(currentFilter);
+                });
+            });
+
+            // Xử lý đăng xuất
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                localStorage.clear();
+                window.location.href = 'login.html';
+            });
+        });
+
+        function loadRestaurants(category) {
+            const container = document.getElementById('restaurantsContainer');
+            const noResults = document.getElementById('noResults');
+
+            let filtered = mockRestaurants;
+            if (category !== 'all') {
+                filtered = mockRestaurants.filter(r => r.category === category);
+            }
+
+            container.innerHTML = '';
+
+            if (filtered.length === 0) {
+                noResults.style.display = 'block';
+                return;
+            }
+
+            noResults.style.display = 'none';
+
+            filtered.forEach(restaurant => {
+                const card = `
+                    <div class="col">
+                        <a href="index.html?id=${restaurant.id}" class="text-decoration-none">
+                            <div class="card restaurant-card h-100">
+                                <img src="${restaurant.imageUrl}" class="card-img-top" alt="${restaurant.name}">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold">${restaurant.name}</h5>
+                                    <p class="card-text small text-muted mb-2">
+                                        <i class="fas fa-map-marker-alt"></i> ${restaurant.address}
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <span class="badge bg-info text-dark">${restaurant.category}</span>
+                                        <span class="text-danger fw-bold">${restaurant.priceAverage}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                `;
+                container.innerHTML += card;
+            });
+        }
+    </script>
+
+</body>
+</html>
+
