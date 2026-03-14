@@ -18,9 +18,15 @@ public class User {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "email")
+    private String email;
 
-    @Column(name = "password")
-    private String password;
+    @Column(name="full_name")
+    private String fullName;
+
+    @Column(name="phone")
+    private String phone;
+
+    @Column(name="is_verified")
+    private Boolean isVerified;
 }

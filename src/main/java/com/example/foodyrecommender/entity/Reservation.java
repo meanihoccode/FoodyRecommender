@@ -36,6 +36,12 @@ public class Reservation {
     @Column(name="party_size")
     private Integer partySize;
 
+    @Column(name = "contact_name")
+    private String contactName;
+
+    @Column(name="contact_phone")
+    private String contactPhone;
+
     @Column(name = "status")
     private String status; // e.g., "CONFIRMED", "CANCELLED", "PENDING"
 

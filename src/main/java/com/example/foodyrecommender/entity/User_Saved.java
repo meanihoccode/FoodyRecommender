@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "user_saved")
@@ -27,4 +28,5 @@ public class User_Saved {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
 }
