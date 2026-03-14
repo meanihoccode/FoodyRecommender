@@ -13,6 +13,6 @@ public class ReservationService {
     private ReservationRepository reservationRepository;
 
     public Reservation getReservationById(long reservationId) {
-        return reservationRepository.findByReservationId(reservationId);
+        return reservationRepository.findById(reservationId);
     }
 }

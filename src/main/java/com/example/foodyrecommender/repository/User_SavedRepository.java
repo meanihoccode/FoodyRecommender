@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface User_SavedRepository extends JpaRepository<User_SavedRepository,Integer> {
+public interface User_SavedRepository extends JpaRepository<User_Saved,Integer> {
     @Query("SELECT us.restaurantId FROM User_Saved us WHERE us.userId = :userId")
     List<Restaurant> findSavedRestaurantsByUserId(long userId);
 
