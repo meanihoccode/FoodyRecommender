@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.annotations.JdbcTypeCode;
 
 @Entity
@@ -15,14 +16,10 @@ import org.hibernate.annotations.JdbcTypeCode;
 @Builder
 public class Recommendation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
-
     @Column(name = "restaurant_id")
     private Long restaurantId;
 
     @Column(name = "similar_restaurant_ids")
-    @JdbcTypeCode(-2602)
+    @JdbcTypeCode(SqlTypes.JSON)
     private String similarRestaurantIds;
 }

@@ -12,27 +12,28 @@ public class WebController implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/html/", "classpath:/css/", "classpath:/js/");
+        registry.addResourceHandler("/css/**").addResourceLocations("classpath:/css/");
+        registry.addResourceHandler("/js/**").addResourceLocations("classpath:/js/");
+        registry.addResourceHandler("/img/**").addResourceLocations("classpath:/img/");
     }
 
     @GetMapping("/")
     public String index() {
-        return "index.html";
+        return "index";
     }
 
     @GetMapping("/home")
     public String home() {
-        return "home.html";
+        return "home";
     }
 
     @GetMapping("/login")
     public String login() {
-        return "login.html";
+        return "login";
     }
 
     @GetMapping("/signup")
     public String signup() {
-        return "signup.html";
+        return "signup";
     }
 }
