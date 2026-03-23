@@ -18,7 +18,7 @@ public class User_SavedController {
     private User_SavedService user_savedService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Restaurant>> getSavedRestaurantsByUserId(@PathVariable long userId) {
+    public ResponseEntity<List<Restaurant>> getSavedRestaurantsByUserId(@PathVariable int userId) {
         List<Restaurant> savedRestaurants = user_savedService.getSavedRestaurantsByUserId(userId);
         return ResponseEntity.ok(savedRestaurants);
     }
@@ -30,7 +30,7 @@ public class User_SavedController {
     }
 
     @DeleteMapping("/{userId}/{restaurantId}")
-    public ResponseEntity<Void> deleteUser_Saved(@PathVariable long userId, @PathVariable long restaurantId) {
+    public ResponseEntity<Void> deleteUser_Saved(@PathVariable int userId, @PathVariable int restaurantId) {
         user_savedService.deleteUser_Saved(userId, restaurantId);
         return ResponseEntity.noContent().build();
     }

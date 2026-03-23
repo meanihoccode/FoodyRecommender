@@ -23,7 +23,7 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Reservation> getReservationById(@PathVariable long id) {
+    public ResponseEntity<Reservation> getReservationById(@PathVariable int id) {
         Reservation reservation = reservationService.getReservationById(id);
         if (reservation != null) {
             return ResponseEntity.ok(reservation);
@@ -39,7 +39,7 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Reservation> updateReservation(@PathVariable long id, @RequestBody Reservation reservation) {
+    public ResponseEntity<Reservation> updateReservation(@PathVariable int id, @RequestBody Reservation reservation) {
         Reservation updatedReservation = reservationService.updateReservation(id, reservation);
         if (updatedReservation != null) {
             return ResponseEntity.ok(updatedReservation);
@@ -49,7 +49,7 @@ public class ReservationController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteReservation(@PathVariable long id) {
+    public ResponseEntity<Void> deleteReservation(@PathVariable int id) {
         reservationService.deleteReservation(id);
         return ResponseEntity.noContent().build();
     }

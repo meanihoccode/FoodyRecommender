@@ -17,7 +17,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 public class Recommendation {
     @Id
     @Column(name = "restaurant_id")
-    private Long restaurantId;
+    private Integer restaurantId;
 
     @Column(name = "similar_restaurant_ids")
     @JdbcTypeCode(SqlTypes.JSON)

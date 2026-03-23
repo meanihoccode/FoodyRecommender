@@ -18,13 +18,13 @@ public class User_Saved {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private Integer userId;
 
     @Column(name = "restaurant_id")
-    private Long restaurantId;
+    private Integer restaurantId;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

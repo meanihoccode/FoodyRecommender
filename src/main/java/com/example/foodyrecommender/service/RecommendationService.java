@@ -18,7 +18,7 @@ public class RecommendationService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public List<Recommendation> getRecommendationByRestaurantId(long restaurantId) {
+    public List<Recommendation> getRecommendationByRestaurantId(int restaurantId) {
         return recommendationRepository.findRecommendationByRestaurantId(restaurantId);
     }
 

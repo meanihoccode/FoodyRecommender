@@ -23,7 +23,7 @@ public class RestaurantController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable long id) {
+    public ResponseEntity<Restaurant> getRestaurantById(@PathVariable int id) {
         Restaurant restaurant = restaurantService.getRestaurantById(id);
         if (restaurant != null) {
             return ResponseEntity.ok(restaurant);
@@ -39,7 +39,7 @@ public class RestaurantController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable long id, @RequestBody Restaurant restaurant) {
+    public ResponseEntity<Restaurant> updateRestaurant(@PathVariable int id, @RequestBody Restaurant restaurant) {
         Restaurant updatedRestaurant = restaurantService.updateRestaurant(id, restaurant);
         if (updatedRestaurant != null) {
             return ResponseEntity.ok(updatedRestaurant);
