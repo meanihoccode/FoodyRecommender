@@ -1,5 +1,6 @@
 package com.example.foodyrecommender.service;
 
+import com.example.foodyrecommender.dto.ChangePasswordRequest;
 import com.example.foodyrecommender.entity.User;
 import com.example.foodyrecommender.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -56,5 +57,20 @@ public class UserService {
 
     public void deleteUser(int id) {
         userRepository.deleteById(id);
+    }
+
+    public User changePassword(long id, ChangePasswordRequest request) {
+        User existUser = userRepository.findUserById(id);
+        if (existUser == null) {
+            throw new RuntimeException("User not found with id: " + id);
+        } else {
+            if (passwordEncoder.matches(request.getOldPassword(), existUser.getPassword())) {
+                existUser.setPassword(request.getNewPassword());
+                userRepository.save(existUser);
+                return existUser;
+            } else  {
+                throw new RuntimeException("Incorrect old password");
+            }
+        }
     }
 }

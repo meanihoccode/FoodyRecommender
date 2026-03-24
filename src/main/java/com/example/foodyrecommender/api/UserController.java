@@ -1,5 +1,6 @@
 package com.example.foodyrecommender.api;
 
+import com.example.foodyrecommender.dto.ChangePasswordRequest;
 import com.example.foodyrecommender.dto.ErrorResponse;
 import com.example.foodyrecommender.dto.LoginRequest;
 import com.example.foodyrecommender.entity.User;
@@ -67,6 +68,16 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("change-password/{id}")
+    public ResponseEntity<User> changePassword(@PathVariable int id, @RequestBody ChangePasswordRequest changePasswordRequest) {
+        User existUser = userService.changePassword(id,changePasswordRequest);
+        if (existUser == null) {
+            return ResponseEntity.notFound().build();
+        } else  {
+            return ResponseEntity.ok(existUser);
+        }
     }
 }
 

@@ -19,7 +19,7 @@ public class ReservationService {
     }
 
     public List<Reservation> getReservationsByUserId(long userId) {
-        return reservationRepository.findByUserId(userId);
+        return reservationRepository.findByUser(userId);
     }
 
     public List<Reservation> getAllReservations() {
@@ -33,8 +33,8 @@ public class ReservationService {
     public Reservation updateReservation(long reservationId, Reservation reservation) {
         Reservation existingReservation = reservationRepository.findById(reservationId);
         if (existingReservation != null) {
-            existingReservation.setUserId(reservation.getUserId());
-            existingReservation.setRestaurantId(reservation.getRestaurantId());
+            existingReservation.setUser(reservation.getUser());
+            existingReservation.setRestaurant(reservation.getRestaurant());
             existingReservation.setBookingDate(reservation.getBookingDate());
             existingReservation.setBookingTime(reservation.getBookingTime());
             existingReservation.setContactName(reservation.getContactName());

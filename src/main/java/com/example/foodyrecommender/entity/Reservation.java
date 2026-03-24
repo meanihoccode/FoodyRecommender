@@ -1,6 +1,7 @@
 package com.example.foodyrecommender.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,24 +22,30 @@ public class Reservation {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "user_id")
-    private Integer userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "restaurant_id")
-    private Integer restaurantId;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
 
+    @NotBlank(message = "Ngày đặt không được trống")
     @Column(name = "booking_date")
     private LocalDate bookingDate;
 
+    @NotBlank(message = "Giờ đặt không được trống")
     @Column(name="booking_time")
     private LocalTime bookingTime;
 
+    @NotBlank(message = "Số người không được trống")
     @Column(name="party_size")
     private Integer partySize;
 
     @Column(name = "contact_name")
     private String contactName;
 
+    @NotBlank(message = "SDT đặt bàn không được trống")
     @Column(name="contact_phone")
     private String contactPhone;
 

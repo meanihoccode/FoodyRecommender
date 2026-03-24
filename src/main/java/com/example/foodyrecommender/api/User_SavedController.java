@@ -34,5 +34,4 @@ public class User_SavedController {
         user_savedService.deleteUser_Saved(userId, restaurantId);
         return ResponseEntity.noContent().build();
     }
-
 }
