@@ -59,14 +59,16 @@ public class GlobalExceptionHandler {
         response.put("error", "Data Integrity Violation");
 
         String message = "Dữ liệu không hợp lệ hoặc vi phạm ràng buộc";
-        if (ex.getCause() != null && ex.getCause().getCause() != null) {
-            String cause = ex.getCause().getCause().getMessage();
-            if (cause.contains("Duplicate entry")) {
-                message = "Dữ liệu đã tồn tại (vi phạm unique constraint)";
-            } else if (cause.contains("foreign key")) {
-                message = "Tham chiếu đến dữ liệu không tồn tại";
-            }
+        String exceptionMessage = ex.getMessage().toLowerCase();
+
+        if (exceptionMessage.contains("duplicate")) {
+            message = "Nhà hàng này đã được lưu vào danh sách yêu thích";
+        } else if (exceptionMessage.contains("foreign key")) {
+            message = "User hoặc Restaurant không tồn tại";
+        } else if (exceptionMessage.contains("user_id") || exceptionMessage.contains("restaurant_id")) {
+            message = "Nhà hàng này đã được lưu vào danh sách yêu thích";
         }
+
         response.put("message", message);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }

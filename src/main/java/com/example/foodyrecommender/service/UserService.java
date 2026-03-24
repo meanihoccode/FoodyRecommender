@@ -48,6 +48,8 @@ public class UserService {
             existingUser.setFullName(user.getFullName());
             existingUser.setEmail(user.getEmail());
             existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            existingUser.setPhone(user.getPhone());
+            existingUser.setIsVerified(user.getIsVerified());
             return userRepository.save(existingUser);
         }
     }
@@ -65,7 +67,7 @@ public class UserService {
             throw new RuntimeException("User not found with id: " + id);
         } else {
             if (passwordEncoder.matches(request.getOldPassword(), existUser.getPassword())) {
-                existUser.setPassword(request.getNewPassword());
+                existUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
                 userRepository.save(existUser);
                 return existUser;
             } else  {

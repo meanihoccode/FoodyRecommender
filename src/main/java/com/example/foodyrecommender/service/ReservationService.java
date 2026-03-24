@@ -48,6 +48,6 @@ public class ReservationService {
     }
 
     public void deleteReservation(long reservationId) {
-        reservationRepository.deleteById(reservationId);
+        reservationRepository.deleteById((int) reservationId);
     }
 }

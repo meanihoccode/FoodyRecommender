@@ -35,8 +35,11 @@ public class SecurityConfig {
                     "/img/**"
                 ).permitAll()
                 // Cho phép truy cập API public
-                .requestMatchers("/api/user/login", "/api/user").permitAll()
-                .requestMatchers("/api/restaurant/**").permitAll()
+                .requestMatchers("/api/user/**").permitAll()
+                .requestMatchers("/api/restaurants/**").permitAll()
+                .requestMatchers("/api/reservations/**").permitAll()
+                .requestMatchers("/api/user-saved/**").permitAll()
+                .requestMatchers("/api/recommendations/**").permitAll()
                 // Các endpoint khác cần xác thực
                 .anyRequest().authenticated()
             )

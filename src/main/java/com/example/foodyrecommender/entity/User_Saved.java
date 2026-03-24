@@ -9,7 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "user_saved")
+@Table(name = "user_saved", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"user_id", "restaurant_id"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
