@@ -60,7 +60,7 @@ public class GlobalExceptionHandler {
 
         String message = "Dữ liệu không hợp lệ hoặc vi phạm ràng buộc";
         String exceptionMessage = ex.getMessage().toLowerCase();
-
+        
         if (exceptionMessage.contains("duplicate")) {
             message = "Nhà hàng này đã được lưu vào danh sách yêu thích";
         } else if (exceptionMessage.contains("foreign key")) {
@@ -68,7 +68,7 @@ public class GlobalExceptionHandler {
         } else if (exceptionMessage.contains("user_id") || exceptionMessage.contains("restaurant_id")) {
             message = "Nhà hàng này đã được lưu vào danh sách yêu thích";
         }
-
+        
         response.put("message", message);
         return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
     }

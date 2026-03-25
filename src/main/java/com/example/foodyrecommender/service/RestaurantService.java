@@ -35,6 +35,7 @@ public class RestaurantService {
             existingRestaurant.setPriceAverage(restaurant.getPriceAverage());
             existingRestaurant.setDescription(restaurant.getDescription());
             existingRestaurant.setImageUrl(restaurant.getImageUrl());
+            existingRestaurant.setRating(restaurant.getRating());
             return restaurantRepository.save(existingRestaurant);
         }
         return null;

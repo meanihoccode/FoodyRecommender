@@ -262,11 +262,19 @@
             const userFullName = localStorage.getItem('userFullName');
             const userId = localStorage.getItem('userId');
 
+            console.log('Home page - localStorage check:');
+            console.log('userId:', userId);
+            console.log('userFullName:', userFullName);
+
             if (!userFullName || !userId) {
-                window.location.href = '/login';
+                console.log('User not logged in, redirecting to login...');
+                setTimeout(() => {
+                    window.location.href = '/login';
+                }, 100);
                 return;
             }
 
+            console.log('User logged in as:', userFullName);
             document.getElementById('username').textContent = userFullName;
 
             // Load danh sách nhà hàng từ mock data
