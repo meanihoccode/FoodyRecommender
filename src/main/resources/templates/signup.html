@@ -5,133 +5,325 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đăng ký - Foody Recommend</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
     <style>
         body {
-            /* Hình nền mờ ảo */
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+            background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.7) 100%),
+                        url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
-            height: 100vh;
+            background-attachment: fixed;
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        .login-card {
-            width: 400px;
-            padding: 40px;
-            border-radius: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.2);
+        .signup-container {
+            width: 100%;
+            max-width: 420px;
+            padding: 2rem;
         }
-        .btn-primary-custom {
-            background-color: #ee4d2d;
+        .signup-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: 3rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .signup-card .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        .signup-card .subtitle {
+            color: var(--text-muted);
+            font-weight: 500;
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+        }
+        .form-floating > label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .form-control {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(238, 77, 45, 0.15);
+            background: white;
+        }
+        .btn-signup {
+            background-color: var(--primary-color);
             border: none;
-            padding: 12px;
-            font-weight: bold;
+            padding: 14px;
+            font-weight: 700;
+            font-size: 1rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: white;
+            letter-spacing: 0.5px;
         }
-        .btn-primary-custom:hover { background-color: #d73211; color: white; }
-        .form-control:focus { border-color: #ee4d2d; box-shadow: 0 0 0 0.2rem rgba(238, 77, 45, 0.25); }
+        .btn-signup:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(238, 77, 45, 0.3);
+            color: white;
+        }
+        .alert {
+            border: none;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 16px;
+        }
+        .alert-danger {
+            background-color: rgba(238, 77, 45, 0.1);
+            color: var(--primary-dark);
+        }
+        .alert-success {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #155724;
+            border-left-color: #198754;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+        .login-link a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .login-link a:hover {
+            color: var(--primary-dark);
+            gap: 0.8rem;
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        .password-strength {
+            height: 4px;
+            background: #e0e0e0;
+            border-radius: 2px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+        .password-strength-bar {
+            height: 100%;
+            width: 0;
+            background: #dc3545;
+            transition: width 0.3s ease;
+        }
+        .password-strength-bar.weak {
+            width: 33%;
+            background: #dc3545;
+        }
+        .password-strength-bar.fair {
+            width: 66%;
+            background: #ffc107;
+        }
+        .password-strength-bar.strong {
+            width: 100%;
+            background: #28a745;
+        }
+        .password-hint {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+        }
+        @media (max-width: 576px) {
+            .signup-card {
+                padding: 2rem 1.5rem;
+            }
+            .signup-card .logo {
+                font-size: 2rem;
+            }
+            .signup-container {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-
-    <div class="login-card text-center">
-        <h2 class="fw-bold text-danger mb-4">FOODY RECOMMEND</h2>
-        <p class="text-muted mb-4">Đăng ký để nhận gợi ý món ngon!</p>
-
-        <form id="signupForm">
-            <div class="form-floating mb-3">
-                <input type="text" class="form-control" id="username" placeholder="Tên đăng nhập" required>
-                <label for="username">Tên đăng nhập</label>
-            </div>
-            <div class="form-floating mb-4">
-                <input type="password" class="form-control" id="password" placeholder="Mật khẩu" required>
-                <label for="password">Mật khẩu</label>
+    <div class="signup-container">
+        <div class="signup-card">
+            <div class="text-center mb-4">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    FOODY
+                </div>
+                <p class="subtitle mb-0">
+                    <i class="fas fa-user-plus me-1" style="color: var(--primary-color);"></i>
+                    Tạo tài khoản để bắt đầu
+                </p>
             </div>
 
-            <div class="form-floating mb-4">
-                <input type="password" class="form-control" id="confirmPassword" placeholder="Nhập lại Mật khẩu" required>
-                <label for="confirmPassword">Nhập lại Mật khẩu</label>
-            </div>
+            <form id="signupForm">
+                <div class="form-group">
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="fullName" placeholder="Họ và tên" required>
+                        <label for="fullName"><i class="fas fa-user me-2" style="color: var(--primary-color);"></i>Họ và tên</label>
+                    </div>
+                </div>
 
-            <div id="errorMsg" class="alert alert-danger d-none" role="alert"></div>
-            <div id="successMsg" class="alert alert-success d-none" role="alert"></div>
+                <div class="form-group">
+                    <div class="form-floating">
+                        <input type="email" class="form-control" id="email" placeholder="Email" required>
+                        <label for="email"><i class="fas fa-envelope me-2" style="color: var(--primary-color);"></i>Email</label>
+                    </div>
+                </div>
 
-            <button type="submit" class="btn btn-primary-custom w-100 mb-3">ĐĂNG KÝ</button>
-            
-            <div class="d-flex justify-content-center text-small">
-                <a href="login.html" style="text-align: center;"
-                class="d-block text-center text-danger fw-bold mt-3">
-                Đã có tài khoản? Đăng nhập ngay
-                </a>           
+                <div class="form-group">
+                    <div class="form-floating">
+                        <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại" pattern="[0-9]{10,11}">
+                        <label for="phone"><i class="fas fa-phone me-2" style="color: var(--primary-color);"></i>Số điện thoại</label>
+                    </div>
+                    <small class="password-hint">Gồm 10-11 chữ số</small>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="password" placeholder="Mật khẩu" required>
+                        <label for="password"><i class="fas fa-lock me-2" style="color: var(--primary-color);"></i>Mật khẩu</label>
+                    </div>
+                    <div class="password-strength mt-2">
+                        <div class="password-strength-bar" id="passwordStrengthBar"></div>
+                    </div>
+                    <small class="password-hint">Tối thiểu 6 ký tự</small>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-floating">
+                        <input type="password" class="form-control" id="confirmPassword" placeholder="Nhập lại mật khẩu" required>
+                        <label for="confirmPassword"><i class="fas fa-lock me-2" style="color: var(--primary-color);"></i>Nhập lại mật khẩu</label>
+                    </div>
+                </div>
+
+                <div id="errorMsg" class="alert alert-danger d-none" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>
+                    <span id="errorText"></span>
+                </div>
+
+                <div id="successMsg" class="alert alert-success d-none" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>
+                    <span id="successText"></span>
+                </div>
+
+                <button type="submit" class="btn btn-signup w-100 mb-2">
+                    <i class="fas fa-user-plus me-2"></i>ĐĂNG KÝ
+                </button>
+            </form>
+
+            <div class="login-link">
+                <p class="text-muted small mb-0">Đã có tài khoản?</p>
+                <a href="/login">
+                    Đăng nhập ngay
+                    <i class="fas fa-arrow-right"></i>
+                </a>
             </div>
-        </form>
-        
-        <hr class="my-4">
-        <p class="small text-muted">Tài khoản demo: user / 123456</p>
+        </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Check auth
+        if (localStorage.getItem('userId')) {
+            window.location.href = '/home';
+        }
+
+        // Password strength
+        const passwordInput = document.getElementById('password');
+        const passwordStrengthBar = document.getElementById('passwordStrengthBar');
+
+        passwordInput.addEventListener('input', function() {
+            const strength = this.value.length;
+            passwordStrengthBar.classList.remove('weak', 'fair', 'strong');
+
+            if (strength < 6) {
+                passwordStrengthBar.classList.add('weak');
+            } else if (strength < 10) {
+                passwordStrengthBar.classList.add('fair');
+            } else {
+                passwordStrengthBar.classList.add('strong');
+            }
+        });
+
+        // Form submit
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            const errorText = document.getElementById('errorText');
+
+            errorMsg.classList.add('d-none');
+            successMsg.classList.add('d-none');
+
+            // Validation
+            if (!fullName) {
+                errorText.textContent = 'Vui lòng nhập họ tên';
+                errorMsg.classList.remove('d-none');
+                return;
+            }
+
+            if (!email) {
+                errorText.textContent = 'Vui lòng nhập email';
+                errorMsg.classList.remove('d-none');
+                return;
+            }
+
+            if (phone && !/^[0-9]{10,11}$/.test(phone)) {
+                errorText.textContent = 'Số điện thoại không hợp lệ (10-11 chữ số)';
+                errorMsg.classList.remove('d-none');
+                return;
+            }
+
+            if (password.length < 6) {
+                errorText.textContent = 'Mật khẩu phải tối thiểu 6 ký tự';
+                errorMsg.classList.remove('d-none');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorText.textContent = 'Mật khẩu không khớp';
+                errorMsg.classList.remove('d-none');
+                return;
+            }
+
+            // Success
+            successMsg.classList.remove('d-none');
+            document.getElementById('successText').textContent = 'Đăng ký thành công! Chuyển hướng...';
+
+            setTimeout(() => {
+                window.location.href = '/login';
+            }, 2000);
+        });
+    </script>
 </body>
-<script>
-    // Mock data - lấy danh sách người dùng từ localStorage hoặc tạo mặc định
-    function getUsers() {
-        const stored = localStorage.getItem('mockUsers');
-        if (stored) {
-            return JSON.parse(stored);
-        }
-        return [
-            { id: 1, username: 'user', password: '123456' },
-            { id: 2, username: 'admin', password: 'admin123' },
-            { id: 3, username: 'test', password: 'test123' }
-        ];
-    }
-
-    function saveUsers(users) {
-        localStorage.setItem('mockUsers', JSON.stringify(users));
-    }
-
-    document.getElementById('signupForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
-        const confirmPassword = document.getElementById('confirmPassword').value;
-        const errorMsg = document.getElementById('errorMsg');
-        const successMsg = document.getElementById('successMsg');
-
-        // Reset messages
-        errorMsg.classList.add('d-none');
-        successMsg.classList.add('d-none');
-
-        // Kiểm tra mật khẩu khớp
-        if (password !== confirmPassword) {
-            errorMsg.textContent = 'Mật khẩu không khớp!';
-            errorMsg.classList.remove('d-none');
-            return;
-        }
-
-        // Kiểm tra username đã tồn tại
-        const users = getUsers();
-        if (users.find(u => u.username === username)) {
-            errorMsg.textContent = 'Tên đăng nhập đã tồn tại!';
-            errorMsg.classList.remove('d-none');
-            return;
-        }
-
-        // Thêm người dùng mới
-        const newUser = {
-            id: users.length + 1,
-            username: username,
-            password: password
-        };
-        users.push(newUser);
-        saveUsers(users);
-
-        successMsg.textContent = 'Đăng ký thành công! Vui lòng đăng nhập.';
-        successMsg.classList.remove('d-none');
-        setTimeout(() => {
-            window.location.href = 'login.html';
-        }, 2000);
-    });
-</script>
 </html>
+

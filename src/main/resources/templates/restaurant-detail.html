@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết nhà hàng - Foody Recommend</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body class="bg-light">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-danger" href="/home">
+                <i class="fas fa-utensils me-2"></i>FOODY RECOMMEND
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/home">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/restaurants">Danh sách nhà hàng</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/reservations">Lịch đặt bàn</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/favorites">
+                        <i class="fas fa-heart me-1"></i>Yêu thích
+                    </a></li>
+                    <li class="nav-item">
+                        <span class="nav-link text-muted">Xin chào, <b id="username">User</b></span>
+                    </li>
+                    <li class="nav-item"><a href="#" id="logoutBtn" class="nav-link text-danger">Đăng xuất</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="bg-white border-bottom">
+        <div class="container py-3">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="/home">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="/restaurants">Nhà hàng</a></li>
+                <li class="breadcrumb-item active" id="breadcrumbName">Loading...</li>
+            </ol>
+        </div>
+    </nav>
+
+    <!-- Restaurant Header -->
+    <div class="container-fluid bg-white pt-4 pb-5">
+        <div class="container">
+            <div class="row">
+                <!-- Restaurant Image -->
+                <div class="col-lg-6 mb-4">
+                    <img id="restaurantImage" src="" alt="Nhà hàng" class="img-fluid rounded-3" style="max-height: 400px; object-fit: cover;">
+                    <button id="favoriteBtn" class="btn btn-outline-danger btn-lg mt-3 w-100">
+                        <i class="fas fa-heart me-2"></i>Thêm vào yêu thích
+                    </button>
+                </div>
+
+                <!-- Restaurant Info -->
+                <div class="col-lg-6">
+                    <h1 id="restaurantName" class="fw-bold mb-2">Loading...</h1>
+                    <div class="d-flex gap-3 mb-4">
+                        <span class="badge bg-danger fs-6">
+                            <i class="fas fa-tag me-1"></i><span id="restaurantCategory">-</span>
+                        </span>
+                        <span class="text-muted">
+                            <i class="fas fa-map-marker-alt me-1 text-danger"></i>
+                            <span id="restaurantAddress">-</span>
+                        </span>
+                    </div>
+
+                    <div class="card bg-light border-0 mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title mb-3">Thông tin chung</h5>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <p class="mb-2">
+                                        <i class="fas fa-receipt text-danger me-2"></i>
+                                        <strong>Mức giá:</strong>
+                                    </p>
+                                    <p class="text-muted" id="restaurantPrice">-</p>
+                                </div>
+                                <div class="col-md-6">
+                                    <p class="mb-2">
+                                        <i class="fas fa-phone text-danger me-2"></i>
+                                        <strong>Liên hệ:</strong>
+                                    </p>
+                                    <p class="text-muted" id="restaurantPhone">-</p>
+                                </div>
+                            </div>
+                            <hr>
+                            <p class="mb-0">
+                                <strong>Mô tả:</strong><br>
+                                <span id="restaurantDescription" class="text-muted">-</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="row text-center g-3">
+                        <div class="col-6">
+                            <div class="bg-warning bg-opacity-10 rounded-3 p-3">
+                                <i class="fas fa-check-circle text-success fa-2x mb-2"></i>
+                                <p class="small mb-0"><strong>Đặt bàn dễ dàng</strong></p>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="bg-info bg-opacity-10 rounded-3 p-3">
+                                <i class="fas fa-clock text-info fa-2x mb-2"></i>
+                                <p class="small mb-0"><strong>Xác nhận nhanh</strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Section -->
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h4 class="card-title fw-bold mb-4">
+                            <i class="fas fa-calendar-check text-danger me-2"></i>Đặt bàn tại nhà hàng
+                        </h4>
+
+                        <form id="bookingForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="bookingDate" class="form-label fw-bold">Ngày đặt <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control form-control-lg" id="bookingDate" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="bookingTime" class="form-label fw-bold">Giờ đặt <span class="text-danger">*</span></label>
+                                    <input type="time" class="form-control form-control-lg" id="bookingTime" required>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="partySize" class="form-label fw-bold">Số người <span class="text-danger">*</span></label>
+                                    <select class="form-select form-select-lg" id="partySize" required>
+                                        <option value="">-- Chọn số người --</option>
+                                        <option value="1">1 người</option>
+                                        <option value="2">2 người</option>
+                                        <option value="3">3 người</option>
+                                        <option value="4">4 người</option>
+                                        <option value="5">5 người</option>
+                                        <option value="6">6 người</option>
+                                        <option value="7">7 người</option>
+                                        <option value="8">8 người</option>
+                                        <option value="9">9 người</option>
+                                        <option value="10">10+ người</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="contactName" class="form-label fw-bold">Tên người đặt <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control form-control-lg" id="contactName" placeholder="Nhập tên của bạn" required>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="contactPhone" class="form-label fw-bold">Số điện thoại <span class="text-danger">*</span></label>
+                                <input type="tel" class="form-control form-control-lg" id="contactPhone" placeholder="Nhập số điện thoại" pattern="[0-9]{10,11}" required>
+                                <small class="text-muted">Số điện thoại gồm 10-11 chữ số</small>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="notes" class="form-label fw-bold">Ghi chú (Tuỳ chọn)</label>
+                                <textarea class="form-control" id="notes" rows="3" placeholder="Vd: Yêu cầu bàn gần cửa sổ, sợ cay, ..."></textarea>
+                            </div>
+
+                            <button type="submit" class="btn btn-danger btn-lg w-100 fw-bold">
+                                <i class="fas fa-check-circle me-2"></i>XÁC NHẬN ĐẶT BÀN
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Booking Guide -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm bg-info bg-opacity-10 mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">
+                            <i class="fas fa-lightbulb text-warning me-2"></i>Hướng dẫn đặt bàn
+                        </h5>
+                        <ol class="small">
+                            <li class="mb-2">Chọn <strong>ngày và giờ</strong> phù hợp</li>
+                            <li class="mb-2">Nhập <strong>số lượng người</strong></li>
+                            <li class="mb-2">Điền <strong>thông tin liên hệ</strong> (bắt buộc)</li>
+                            <li class="mb-2">Thêm <strong>ghi chú</strong> nếu cần (tuỳ chọn)</li>
+                            <li>Nhấn <strong>Xác nhận</strong> để hoàn tất</li>
+                        </ol>
+                        <hr>
+                        <p class="small mb-0 text-muted">
+                            <i class="fas fa-info-circle me-1"></i>
+                            Nhà hàng sẽ liên hệ xác nhận đặt bàn trong vòng 30 phút
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Contact Card -->
+                <div class="card border-0 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold mb-3">Liên hệ trực tiếp</h5>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-outline-danger btn-sm" id="callBtn">
+                                <i class="fas fa-phone me-2"></i>Gọi nhà hàng
+                            </button>
+                            <button class="btn btn-outline-danger btn-sm" id="chatBtn">
+                                <i class="fas fa-comments me-2"></i>Chat với nhà hàng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0">
+                <div class="modal-body text-center py-5">
+                    <div class="mb-3">
+                        <i class="fas fa-check-circle text-success" style="font-size: 60px;"></i>
+                    </div>
+                    <h4 class="mb-2">Đặt bàn thành công!</h4>
+                    <p class="text-muted mb-4">Nhà hàng sẽ liên hệ xác nhận trong vòng 30 phút</p>
+                    <div class="alert alert-info alert-sm mb-3">
+                        <strong>Mã đặt bàn:</strong> <span id="bookingCode">#12345</span>
+                    </div>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Tiếp tục duyệt nhà hàng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommended Restaurants Section -->
+    <div class="container my-5">
+        <div class="section-header mb-4">
+            <i class="fas fa-sparkles text-warning"></i>
+            <h4>Nhà hàng gợi ý cho bạn</h4>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5" id="recommendedContainer">
+            <!-- Recommended restaurants will be loaded here -->
+        </div>
+        <div id="noRecommended" class="text-center text-muted py-4" style="display: none;">
+            <i class="fas fa-info-circle me-2"></i>
+            <span>Không có nhà hàng gợi ý khác</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <div class="container">
+            <p class="mb-2">© 2026 Hệ thống Gợi ý Món ăn - Foody Recommend</p>
+            <p class="small text-muted">Liên hệ: contact@foodyrecommend.com | Hotline: 1900-XXXX</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
