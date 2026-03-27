@@ -28,6 +28,7 @@ dependencies {
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
     implementation 'com.mysql:mysql-connector-j:8.0.33'
+    implementation 'org.springframework.boot:spring-boot-devtools'
 
     // ✅ JWT Dependencies
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'

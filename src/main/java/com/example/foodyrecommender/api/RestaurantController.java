@@ -32,6 +32,13 @@ public class RestaurantController {
         }
     }
 
+    // Trong RestaurantController.java
+    @GetMapping("/list")
+    public ResponseEntity<List<Restaurant>> getRestaurantsByIds(@RequestParam List<Integer> ids) {
+        List<Restaurant> restaurants = restaurantService.getRestaurantsByIds(ids);
+        return ResponseEntity.ok(restaurants);
+    }
+
     @PostMapping
     public ResponseEntity<Restaurant> createRestaurant(@RequestBody Restaurant restaurant) {
         Restaurant createdRestaurant = restaurantService.createRestaurant(restaurant);

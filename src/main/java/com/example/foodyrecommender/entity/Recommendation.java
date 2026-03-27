@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.type.SqlTypes;
 import org.hibernate.annotations.JdbcTypeCode;
 
+import java.util.List;
+
 @Entity
 @Table(name = "recommendations")
 @Data
@@ -19,7 +21,7 @@ public class Recommendation {
     @Column(name = "restaurant_id")
     private Integer restaurantId;
 
-    @Column(name = "similar_restaurant_ids")
+    @Column(name = "similar_restaurant_ids", columnDefinition = "json")
     @JdbcTypeCode(SqlTypes.JSON)
-    private String similarRestaurantIds;
+    private List<Integer> similarRestaurantIds;
 }

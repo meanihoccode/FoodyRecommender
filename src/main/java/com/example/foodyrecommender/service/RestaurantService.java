@@ -26,6 +26,13 @@ public class RestaurantService {
         return restaurantRepository.findAll();
     }
 
+
+    // Trong RestaurantService.java
+    public List<Restaurant> getRestaurantsByIds(List<Integer> ids) {
+        // findAllById sẽ tự động tạo câu lệnh SQL: SELECT * FROM restaurants WHERE id IN (...)
+        return restaurantRepository.findAllById(ids);
+    }
+
     public Restaurant updateRestaurant(long id, Restaurant restaurant) {
         Restaurant existingRestaurant = restaurantRepository.findRestaurantById(id);
         if (existingRestaurant != null) {
@@ -40,6 +47,7 @@ public class RestaurantService {
         }
         return null;
     }
+
 
     public void deleteRestaurant(int id) {
         restaurantRepository.deleteById(id);

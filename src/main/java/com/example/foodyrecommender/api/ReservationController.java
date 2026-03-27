@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -33,9 +34,17 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<Reservation> createReservation(@RequestBody Reservation reservation) {
-        Reservation createdReservation = reservationService.saveReservation(reservation);
-        return ResponseEntity.status(201).body(createdReservation);
+    public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
+        try {
+            Reservation saved = reservationService.saveReservation(reservation);
+            return ResponseEntity.status(201).body(saved);
+        } catch (IllegalArgumentException e) {
+            // Trả về mã 400 và nội dung lỗi bạn đã viết ở Service
+            return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
+        } catch (Exception e) {
+            // Các lỗi hệ thống khác thì trả về 500
+            return ResponseEntity.status(500).body(Map.of("message", "Có lỗi xảy ra, vui lòng thử lại sau!"));
+        }
     }
 
     @PutMapping("/{id}")

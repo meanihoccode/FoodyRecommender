@@ -30,7 +30,13 @@ public class User_Saved {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false) // Thêm updatable = false để chống bị ghi đè khi update
     private LocalDateTime createdAt;
+
+    // Thần chú của Hibernate
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now(); // Tự động lấy giờ hiện tại
+    }
 
 }
