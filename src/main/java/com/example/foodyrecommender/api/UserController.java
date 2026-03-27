@@ -1,5 +1,6 @@
 package com.example.foodyrecommender.api;
 
+import com.example.foodyrecommender.dto.ChangePasswordRequest;
 import com.example.foodyrecommender.dto.ErrorResponse;
 import com.example.foodyrecommender.dto.LoginRequest;
 import com.example.foodyrecommender.entity.User;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable long id) {
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
         return ResponseEntity.ok(userService.getUserById(id));
     }
 
@@ -59,7 +60,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable long id, @RequestBody User user) {
+    public ResponseEntity<User> updateUser(@PathVariable int id, @RequestBody User user) {
         return ResponseEntity.ok(userService.updateUser(id, user));
     }
 
@@ -67,6 +68,16 @@ public class UserController {
     public ResponseEntity<Void> deleteUser(@PathVariable int id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("change-password/{id}")
+    public ResponseEntity<User> changePassword(@PathVariable int id, @RequestBody ChangePasswordRequest changePasswordRequest) {
+        User existUser = userService.changePassword(id,changePasswordRequest);
+        if (existUser == null) {
+            return ResponseEntity.notFound().build();
+        } else  {
+            return ResponseEntity.ok(existUser);
+        }
     }
 }
 

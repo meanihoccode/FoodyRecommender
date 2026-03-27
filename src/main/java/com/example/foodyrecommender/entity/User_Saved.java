@@ -9,7 +9,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
-@Table(name = "user_saved")
+@Table(name = "user_saved", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"user_id", "restaurant_id"})
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -18,15 +20,23 @@ public class User_Saved {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private Integer id;
 
-    @Column(name = "user_id")
-    private Long userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
-    @Column(name = "restaurant_id")
-    private Long restaurantId;
+    @ManyToOne
+    @JoinColumn(name = "restaurant_id", nullable = false)
+    private Restaurant restaurant;
 
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false) // Thêm updatable = false để chống bị ghi đè khi update
     private LocalDateTime createdAt;
+
+    // Thần chú của Hibernate
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = LocalDateTime.now(); // Tự động lấy giờ hiện tại
+    }
 
 }

@@ -6,6 +6,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class RestaurantService {
@@ -15,4 +17,40 @@ public class RestaurantService {
     public Restaurant getRestaurantById(long id) {
         return restaurantRepository.findRestaurantById(id);
     }
+
+    public Restaurant createRestaurant(Restaurant restaurant) {
+        return restaurantRepository.save(restaurant);
+    }
+
+    public List<Restaurant> getAllRestaurants() {
+        return restaurantRepository.findAll();
+    }
+
+
+    // Trong RestaurantService.java
+    public List<Restaurant> getRestaurantsByIds(List<Integer> ids) {
+        // findAllById sẽ tự động tạo câu lệnh SQL: SELECT * FROM restaurants WHERE id IN (...)
+        return restaurantRepository.findAllById(ids);
+    }
+
+    public Restaurant updateRestaurant(long id, Restaurant restaurant) {
+        Restaurant existingRestaurant = restaurantRepository.findRestaurantById(id);
+        if (existingRestaurant != null) {
+            existingRestaurant.setName(restaurant.getName());
+            existingRestaurant.setAddress(restaurant.getAddress());
+            existingRestaurant.setCategory(restaurant.getCategory());
+            existingRestaurant.setPriceAverage(restaurant.getPriceAverage());
+            existingRestaurant.setDescription(restaurant.getDescription());
+            existingRestaurant.setImageUrl(restaurant.getImageUrl());
+            existingRestaurant.setRating(restaurant.getRating());
+            return restaurantRepository.save(existingRestaurant);
+        }
+        return null;
+    }
+
+
+    public void deleteRestaurant(int id) {
+        restaurantRepository.deleteById(id);
+    }
+
 }

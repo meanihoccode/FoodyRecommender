@@ -7,6 +7,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class RecommendationService {
@@ -16,7 +18,11 @@ public class RecommendationService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public Recommendation getRecommendationByRestaurantId(long restaurantId) {
+    public List<Recommendation> getRecommendationByRestaurantId(int restaurantId) {
         return recommendationRepository.findRecommendationByRestaurantId(restaurantId);
+    }
+
+    public List<Recommendation> getAllRecommendations() {
+        return recommendationRepository.findAll();
     }
 }

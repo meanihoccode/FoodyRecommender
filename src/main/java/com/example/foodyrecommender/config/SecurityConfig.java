@@ -23,20 +23,26 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())  // Tạm thời disable CSRF (cần enable lại khi production)
             .authorizeHttpRequests(authorize -> authorize
                 // Cho phép truy cập các trang công khai
-                .requestMatchers(
-                    "/",
-                    "/index",
-                    "/login",
-                    "/signup",
-                    "/home",
-                    "/restaurants",
-                    "/css/**",
-                    "/js/**",
-                    "/img/**"
-                ).permitAll()
+                    .requestMatchers(
+                            "/",
+                            "/index",
+                            "/*.html", // hỗ trợ các link cũ dạng /login.html, /restaurant-detail.html...
+                            "/login",
+                            "/signup",
+                            "/home",
+                            "/restaurants",
+                            "/css/**",
+                            "/js/**",
+                            "/img/**",
+                            "/restaurant-detail"
+                    ).permitAll()
                 // Cho phép truy cập API public
-                .requestMatchers("/api/user/login", "/api/user").permitAll()
-                .requestMatchers("/api/restaurant/**").permitAll()
+                .requestMatchers("/api/user/**").permitAll()
+                .requestMatchers("/api/restaurants/**").permitAll()
+                .requestMatchers("/api/reservations/**").permitAll()
+                .requestMatchers("/api/user-saved/**").permitAll()
+                .requestMatchers("/api/recommendations/**").permitAll()
+                    .requestMatchers("/restaurant-detail/**").permitAll()
                 // Các endpoint khác cần xác thực
                 .anyRequest().authenticated()
             )
@@ -51,4 +57,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-

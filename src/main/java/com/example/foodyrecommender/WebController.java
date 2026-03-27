@@ -19,7 +19,7 @@ public class WebController implements WebMvcConfigurer {
 
     @GetMapping("/")
     public String index() {
-        return "index";
+        return "home";
     }
 
     @GetMapping("/home")
@@ -35,5 +35,15 @@ public class WebController implements WebMvcConfigurer {
     @GetMapping("/signup")
     public String signup() {
         return "signup";
+    }
+
+    @GetMapping("/restaurants")
+    public String restaurants() {
+        return "restaurants";
+    }
+
+    @GetMapping("/restaurant-detail")
+    public String restaurantDetail() {
+        return "restaurant-detail";
     }
 }
