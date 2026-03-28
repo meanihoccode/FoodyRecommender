@@ -49,4 +49,13 @@ public class WebController implements WebMvcConfigurer {
 
     @GetMapping("/reservations")
     public String reservations() {return "reservations";}
+
+    @GetMapping("/favourites")
+    public String favourites() {return "favorites";}
+
+    // Alias: nhiều bạn hay gõ nhầm không có 's'
+    @GetMapping("/favourite")
+    public String favouriteAlias() {
+        return "favorites";
+    }
 }

@@ -175,5 +175,10 @@ document.querySelector("#confirmCancelBtn").addEventListener('click', async func
     }
 })
 
+document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.href = '/login';
+});
 // Gọi hàm khi load trang
 document.addEventListener('DOMContentLoaded', loadReservations);

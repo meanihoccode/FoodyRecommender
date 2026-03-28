@@ -37,7 +37,11 @@ public class SecurityConfig {
                             "/restaurant-detail",
                             "/restaurant-detail/**",
                             "/reservations",
-                            "/reservations/**" // allow /reservations/1, /reservations/anything
+                            "/reservations/**" ,
+                            "/favourites",
+                            "/favourites/**",
+                            "/favourite",
+                            "/favourite/**" // alias
                     ).permitAll()
                 // Cho phép truy cập API public
                 .requestMatchers("/api/user/**").permitAll()

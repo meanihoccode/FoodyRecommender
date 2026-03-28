@@ -145,5 +145,12 @@ document.querySelectorAll(".category-badge").forEach(badge => {
     });
 });
 
+
+document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.href = '/login';
+});
+
 // Load khi mở trang
 loadRestaurants();
