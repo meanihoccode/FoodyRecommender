@@ -46,4 +46,7 @@ public class WebController implements WebMvcConfigurer {
     public String restaurantDetail() {
         return "restaurant-detail";
     }
+
+    @GetMapping("/reservations")
+    public String reservations() {return "reservations";}
 }

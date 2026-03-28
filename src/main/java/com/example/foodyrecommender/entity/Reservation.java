@@ -55,7 +55,7 @@ public class Reservation {
     // Đã sửa: Thêm @Builder.Default để Lombok không bỏ qua giá trị này
     @Builder.Default
     @Column(name = "status")
-    private String status = "Chờ xác nhận";
+    private String status = "PENDING";
 
     // Đã sửa: Giữ lại đúng 1 trường createdAt này thôi
     @Column(name = "created_at", updatable = false) // Thêm updatable = false để chống bị ghi đè khi update

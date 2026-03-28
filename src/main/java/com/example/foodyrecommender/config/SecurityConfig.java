@@ -34,7 +34,10 @@ public class SecurityConfig {
                             "/css/**",
                             "/js/**",
                             "/img/**",
-                            "/restaurant-detail"
+                            "/restaurant-detail",
+                            "/restaurant-detail/**",
+                            "/reservations",
+                            "/reservations/**" // allow /reservations/1, /reservations/anything
                     ).permitAll()
                 // Cho phép truy cập API public
                 .requestMatchers("/api/user/**").permitAll()
@@ -42,7 +45,8 @@ public class SecurityConfig {
                 .requestMatchers("/api/reservations/**").permitAll()
                 .requestMatchers("/api/user-saved/**").permitAll()
                 .requestMatchers("/api/recommendations/**").permitAll()
-                    .requestMatchers("/restaurant-detail/**").permitAll()
+                .requestMatchers("/api/users/**").permitAll()
+                .requestMatchers("/api/reservations/users/**").permitAll()
                 // Các endpoint khác cần xác thực
                 .anyRequest().authenticated()
             )

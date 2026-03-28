@@ -1,6 +1,8 @@
 package com.example.foodyrecommender.service;
 
+import com.example.foodyrecommender.entity.Reservation;
 import com.example.foodyrecommender.entity.Restaurant;
+import com.example.foodyrecommender.repository.ReservationRepository;
 import com.example.foodyrecommender.repository.RestaurantRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
