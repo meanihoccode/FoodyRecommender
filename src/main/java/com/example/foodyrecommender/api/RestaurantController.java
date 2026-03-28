@@ -4,6 +4,9 @@ package com.example.foodyrecommender.api;
 import com.example.foodyrecommender.entity.Restaurant;
 import com.example.foodyrecommender.service.RestaurantService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,6 +40,19 @@ public class RestaurantController {
     public ResponseEntity<List<Restaurant>> getRestaurantsByIds(@RequestParam List<Integer> ids) {
         List<Restaurant> restaurants = restaurantService.getRestaurantsByIds(ids);
         return ResponseEntity.ok(restaurants);
+    }
+
+    // Trong file RestaurantController.java
+    @GetMapping("/search")
+    public ResponseEntity<Page<Restaurant>> searchRestaurants(
+            @RequestParam(required = false, defaultValue = "") String keyword,
+            @RequestParam(required = false, defaultValue = "") String category,
+            @RequestParam(defaultValue = "0") int page, // Trang mặc định là 0
+            @RequestParam(defaultValue = "12") int size) { // Mỗi trang 12 nhà hàng
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Restaurant> results = restaurantService.searchRestaurants(keyword, category, pageable);
+        return ResponseEntity.ok(results);
     }
 
     @PostMapping

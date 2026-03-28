@@ -2,6 +2,17 @@ let restaurants = [];
 let filteredRestaurants = [];
 let currentCategory = "all";
 
+// HÀM VẼ SAO (Dùng chung)
+function renderStars(rating) {
+    let stars = "";
+    for (let i = 1; i <= 5; i++) {
+        if (rating >= i) stars += '<i class="fas fa-star text-warning"></i>';
+        else if (rating >= i - 0.5) stars += '<i class="fas fa-star-half-alt text-warning"></i>';
+        else stars += '<i class="far fa-star text-warning"></i>';
+    }
+    return stars;
+}
+
 // Load dữ liệu
 async function loadRestaurants() {
     try {
@@ -40,30 +51,28 @@ function renderRestaurants(list) {
     noResults.style.display = "none";
 
     list.forEach(r => {
-
+        const starHtml = renderStars(r.rating || 0);
         container.innerHTML += `
-        <div class="col">
-            <div class="card h-100 shadow-sm">
-                <img src="${r.image || 'https://via.placeholder.com/300'}" 
-                     class="card-img-top" 
-                     style="height:180px; object-fit:cover">
-
-                <div class="card-body">
-                    <h5 class="card-title">${r.name}</h5>
-                    <p class="text-muted small">${r.category || ''}</p>
-                    <p class="fw-bold text-danger">
-                        ${r.price || ''} VNĐ
-                    </p>
-                </div>
-
-                <div class="card-footer bg-white border-0">
-                    <button class="btn btn-outline-danger w-100">
-                        Xem chi tiết
-                    </button>
-                </div>
-            </div>
-        </div>
-        `;
+                    <div class="col">
+                        <div class="card h-100 border-0 shadow-sm hover-shadow transition">
+                            <div class="position-relative">
+                                <a href="/restaurant-detail.html?id=${r.id}">
+                                    <img src="${r.imageUrl}" class="card-img-top rounded-top" style="height: 180px; object-fit: cover;" alt="${r.name}">
+                                </a>
+                            </div>
+                            <div class="card-body p-3">
+                                <span class="badge bg-danger bg-opacity-10 text-danger mb-2" style="font-size: 0.7rem;">${r.category}</span>
+                                <h6 class="card-title fw-bold mb-1 text-truncate">
+                                    <a href="/restaurant-detail.html?id=${r.id}" class="text-decoration-none text-dark">${r.name}</a>
+                                </h6>
+                                <div class="mb-2 small">${starHtml} <span class="text-muted">(${r.rating || 0})</span></div>
+                                <p class="card-text small text-muted text-truncate mb-2"><i class="fas fa-map-marker-alt me-1"></i>${r.address}</p>
+                                <p class="card-text small fw-bold text-danger mb-3"><i class="fas fa-tag me-1"></i>${r.priceAverage}</p>
+                                <a href="/restaurant-detail.html?id=${r.id}" class="btn btn-outline-danger btn-sm w-100 rounded-pill fw-bold">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
     });
 }
 
