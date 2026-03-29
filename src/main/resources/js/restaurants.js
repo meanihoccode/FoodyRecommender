@@ -2,6 +2,7 @@
 let currentPage = 0;
 let currentKeyword = "";
 let currentCategory = ""; // rỗng nghĩa là Tất cả
+let currentSort = "name"; // Mặc định sắp xếp theo tên
 
 // Hàm vẽ sao
 function renderStars(rating) {
@@ -48,11 +49,11 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
 
-
-    // 7. Sự kiện Sắp xếp (Đọc phần Lưu ý bên dưới)
-    document.getElementById("sortBy").addEventListener("change", () => {
-        alert("Tính năng sắp xếp đang được cập nhật ở Backend!");
-        // Sau này khi API hỗ trợ, bạn sẽ gọi fetchRestaurants kèm thêm tham số sort ở đây
+    // 7. Tìm kiếm theo giá, tên, ...
+    document.getElementById("sortBy").addEventListener("change", (e) => {
+        currentSort = e.target.value; // Lấy giá trị (name, price-asc, price-desc)
+        currentPage = 0;              // Reset về trang 1
+        fetchRestaurants(currentKeyword, currentCategory, currentPage, false);
     });
 });
 
@@ -76,8 +77,8 @@ async function fetchRestaurants(keyword, category, page, isAppend) {
             document.getElementById("restaurantsContainer").innerHTML = ""; // Xóa dữ liệu cũ
         }
 
-        const url = `/api/restaurants/search?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(category)}&page=${page}&size=12`;
-        const response = await fetch(url);
+        // Bạn tìm dòng định nghĩa url và nối thêm &sortBy=${currentSort} vào đuôi:
+        const url = `/api/restaurants/search?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(category)}&page=${page}&size=12&sortBy=${currentSort}`;        const response = await fetch(url);
 
         if (response.ok) {
             const pageData = await response.json();

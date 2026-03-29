@@ -45,4 +45,7 @@ public class Restaurant {
 
     @Column(name = "rating")
     private Float rating;
+
+    @Column(name = "min_price")
+    private Integer minPrice;
 }
