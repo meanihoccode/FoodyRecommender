@@ -15,6 +15,7 @@ public interface RestaurantRepository extends JpaRepository<Restaurant,Integer> 
 
     @Query("SELECT r FROM Restaurant r WHERE " +
             "(:keyword IS NULL OR :keyword = '' OR LOWER(r.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(r.address) LIKE LOWER(CONCAT('%', :keyword, '%'))) " +
-            "AND (:category IS NULL OR :category = '' OR r.category = :category)")
+            // SỬA DÒNG DƯỚI ĐÂY: Dùng LIKE thay vì dấu = cho Category
+            "AND (:category IS NULL OR :category = '' OR LOWER(r.category) LIKE LOWER(CONCAT('%', :category, '%')))")
     Page<Restaurant> searchRestaurants(@Param("keyword") String keyword, @Param("category") String category, Pageable pageable);
 }

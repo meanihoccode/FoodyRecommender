@@ -88,18 +88,12 @@ public class ReservationService {
         return reservationRepository.findByUser(existingUser.getId());
     }
 
+    @Transactional
     public Reservation cancelReservation(int id) {
-        // Tìm đơn đặt bàn
-        Reservation existing = reservationRepository.getReservationById(id);
+        // 1. Chạy lệnh UPDATE thẳng xuống Database (Bỏ qua hoàn toàn Validation)
+        reservationRepository.cancelReservationDirectly(id);
 
-        if (existing != null) {
-            existing.setStatus("CANCELLED");
-            // GỌI THẲNG HÀM SAVE CỦA REPOSITORY ĐỂ BỎ QUA KHÂU KIỂM TRA NGÀY GIỜ
-            return reservationRepository.save(existing);
-        }
-        return null;
-    }
-    public void deleteReservation(int reservationId) {
-        reservationRepository.deleteById(reservationId);
+        // 2. Tận dụng luôn hàm getReservationById có sẵn của bạn để lấy dữ liệu mới
+        return getReservationById(id);
     }
 }

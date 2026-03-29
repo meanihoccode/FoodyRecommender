@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     document.getElementById('username').textContent = localStorage.getItem('userFullName') || "User";
 
+    loadCategoryFilter();
     // 2. Load dữ liệu lần đầu
     fetchRestaurants("", "", 0, false);
 
@@ -39,31 +40,14 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.key === 'Enter') handleSearch();
     });
 
-    // 5. Sự kiện Lọc theo Danh mục
-    document.querySelectorAll(".category-badge").forEach(badge => {
-        badge.addEventListener("click", () => {
-            // Đổi màu badge
-            document.querySelectorAll(".category-badge").forEach(b => b.classList.remove("active"));
-            badge.classList.add("active");
-
-            // Lấy category (Nếu là 'all' thì gán bằng chuỗi rỗng để API tìm tất cả)
-            const selectedCat = badge.dataset.category;
-            currentCategory = (selectedCat === "all") ? "" : selectedCat;
-
-            // Tìm mới nên reset trang và từ khóa
-            currentKeyword = "";
-            document.getElementById('searchInput').value = "";
-            currentPage = 0;
-
-            fetchRestaurants(currentKeyword, currentCategory, currentPage, false);
-        });
-    });
 
     // 6. Sự kiện Xem thêm
     document.getElementById('loadMoreBtn').addEventListener('click', () => {
         currentPage++;
         fetchRestaurants(currentKeyword, currentCategory, currentPage, true);
     });
+
+
 
     // 7. Sự kiện Sắp xếp (Đọc phần Lưu ý bên dưới)
     document.getElementById("sortBy").addEventListener("change", () => {
@@ -171,5 +155,40 @@ function renderRestaurants(list, isAppend) {
         `;
         // Dùng insertAdjacentHTML để không bị mất các Card cũ khi Xem thêm
         container.insertAdjacentHTML('beforeend', cardHtml);
+    });
+}
+
+function loadCategoryFilter() {
+    const categories = [
+        { name: 'Lẩu', searchKey: 'lẩu', icon: 'fas fa-fire' },
+        { name: 'Hải sản', searchKey: 'hải sản', icon: 'fas fa-shrimp' },
+        { name: 'Âu / Á', searchKey: 'âu', icon: 'fas fa-utensils' }, // Gửi chữ 'âu' sẽ dính cả Á Âu
+        { name: 'Nhật Bản', searchKey: 'nhật', icon: 'fas fa-torii-gate' },
+        { name: 'Ăn nhậu', searchKey: 'nhậu', icon: 'fas fa-beer' },
+        { name: 'Buffet', searchKey: 'buffet', icon: 'fas fa-hamburger' }
+    ];
+    const categoryFilter = document.querySelector("#categoryFilter");
+    let html = categories.map(cat => `
+           <span class ="category-badge" data-category="${cat.searchKey}">
+                <i class="${cat.icon} me-2"></i>${cat.name}
+           </span>
+    `).join('');
+    categoryFilter.insertAdjacentHTML('beforeend', html);
+
+    // Gắn sự kiện click NGAY SAU KHI vẽ HTML xong
+    document.querySelectorAll(".category-badge").forEach(badge => {
+        badge.addEventListener("click", () => {
+            document.querySelectorAll(".category-badge").forEach(b => b.classList.remove("active"));
+            badge.classList.add("active");
+
+            const selectedCat = badge.dataset.category;
+            currentCategory = (selectedCat === "all") ? "" : selectedCat;
+
+            currentKeyword = "";
+            document.getElementById('searchInput').value = "";
+            currentPage = 0;
+
+            fetchRestaurants(currentKeyword, currentCategory, currentPage, false);
+        });
     });
 }

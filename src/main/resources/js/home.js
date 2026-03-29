@@ -156,20 +156,22 @@ function filterByCategory(categoryName) {
 
 /* ==================== HÀM BỔ TRỢ GIAO DIỆN ==================== */
 
+
 // Vẽ danh sách icon danh mục
 function loadCategories() {
+    // THÊM THUỘC TÍNH 'searchKey': Đây là từ khóa thực sự sẽ gửi xuống API
     const categories = [
-        { name: 'Cơm', icon: 'fas fa-utensils' },
-        { name: 'Phở / Bún', icon: 'fas fa-bowl-food' },
-        { name: 'Đồ uống', icon: 'fas fa-coffee' },
-        { name: 'Ăn vặt', icon: 'fas fa-pizza-slice' },
-        { name: 'Chay', icon: 'fas fa-leaf' },
-        { name: 'Bánh mỳ', icon: 'fas fa-hamburger' }
+        { name: 'Lẩu', searchKey: 'lẩu', icon: 'fas fa-fire' },
+        { name: 'Hải sản', searchKey: 'hải sản', icon: 'fas fa-shrimp' },
+        { name: 'Âu / Á', searchKey: 'âu', icon: 'fas fa-utensils' }, // Gửi chữ 'âu' sẽ dính cả Á Âu
+        { name: 'Nhật Bản', searchKey: 'nhật', icon: 'fas fa-torii-gate' },
+        { name: 'Ăn nhậu', searchKey: 'nhậu', icon: 'fas fa-beer' },
+        { name: 'Buffet', searchKey: 'buffet', icon: 'fas fa-hamburger' }
     ];
 
     const container = document.getElementById('categoriesContainer');
     container.innerHTML = categories.map(cat => `
-        <div class="col category-item" onclick="filterByCategory('${cat.name}')">
+        <div class="col category-item" onclick="filterByCategory('${cat.searchKey}')">
             <div class="category-icon"><i class="${cat.icon}"></i></div>
             <h6>${cat.name}</h6>
         </div>
