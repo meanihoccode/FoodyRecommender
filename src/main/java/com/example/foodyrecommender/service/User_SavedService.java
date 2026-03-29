@@ -26,4 +26,12 @@ public class User_SavedService {
     public void deleteUser_Saved(int userId, int restaurantId) {
         user_SavedRepository.deleteByUserIdAndRestaurantId(userId, restaurantId);
     }
+
+    public boolean existsById(long id) {
+        return user_SavedRepository.existsById(id);
+    }
+
+    public void deleteById(long id) {
+        user_SavedRepository.deleteById(id);
+    }
 }

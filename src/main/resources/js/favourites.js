@@ -65,7 +65,7 @@ function renderFavorites(dataToRender) {
     const container = document.querySelector("#favoritesContainer");
     const noResults = document.querySelector("#noResults");
 
-    container.innerHTML = ''; // Xóa sạch giao diện cũ
+    container.innerHTML = '';
 
     if (!dataToRender || dataToRender.length === 0) {
         noResults.style.display = "block";
@@ -75,23 +75,23 @@ function renderFavorites(dataToRender) {
     noResults.style.display = "none";
 
     dataToRender.forEach(item => {
-        // TUYỆT CHIÊU: Hỗ trợ cả 2 dạng JSON từ Backend (Lồng nhau hoặc Flat)
         const res = item.restaurant ? item.restaurant : item;
 
-        // Dùng item.id (nếu là bảng trung gian) hoặc res.id (nếu xóa trực tiếp bằng ID nhà hàng)
-        // Cần đảm bảo hàm Xóa lấy đúng ID mà API của bạn yêu cầu. Giả sử API xóa theo ID của bảng Yêu Thích.
-        const favId = item.id;
+        // Nếu backend trả về User_Saved => item.id là id bảng trung gian.
+        // Nếu backend trả về Restaurant => item.id chính là restaurantId.
+        const favId = item.restaurant ? item.id : null;
+        const restaurantId = res.id;
 
         const starHtml = renderStars(res.rating || 0);
 
         const cardHtml = `
-            <div class="col" id="fav-item-${favId}">
+            <div class="col" id="fav-item-${item.restaurant ? favId : restaurantId}">
                 <div class="card h-100 border-0 shadow-sm hover-shadow transition">
                     <div class="position-relative">
                         <a href="/restaurant-detail.html?id=${res.id}">
                             <img src="${res.imageUrl || 'https://via.placeholder.com/300x200'}" class="card-img-top rounded-top" style="height: 180px; object-fit: cover;">
                         </a>
-                        <button onclick="removeFavorite(${favId})" class="btn btn-light btn-sm position-absolute top-0 end-0 m-2 rounded-circle text-danger shadow-sm">
+                        <button onclick="removeFavorite(${restaurantId}, ${favId ?? 'null'})" class="btn btn-light btn-sm position-absolute top-0 end-0 m-2 rounded-circle text-danger shadow-sm">
                             <i class="fas fa-heart"></i>
                         </button>
                     </div>
@@ -153,31 +153,46 @@ function extractMinPrice(priceStr) {
     return match ? parseInt(match[0]) : 0;
 }
 
-// 6. HÀM XÓA YÊU THÍCH (Đã sửa lại cho chuẩn)
-async function removeFavorite(favId) {
-    // Thêm hàm confirm cho chắc chắn
+// 6. HÀM XÓA YÊU THÍCH
+// removeFavorite(restaurantId, favIdOptional)
+async function removeFavorite(restaurantId, favId) {
     if (!confirm("Bạn có chắc muốn bỏ yêu thích nhà hàng này?")) return;
 
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+        window.location.href = '/login';
+        return;
+    }
+
     try {
-        // Gọi API Xóa (Đường dẫn phụ thuộc vào Backend của bạn)
-        const response = await fetch(`/api/user-saved/${favId}`, {
-            method: "DELETE"
-        });
+        // Ưu tiên đúng contract backend hiện tại: DELETE theo (userId, restaurantId)
+        let url = `/api/user-saved/${userId}/${restaurantId}`;
+
+        // Nếu backend của bạn trả về User_Saved (có favId) và muốn xóa theo id bảng trung gian
+        if (favId !== null && favId !== undefined) {
+            url = `/api/user-saved/${favId}`;
+        }
+
+        const response = await fetch(url, { method: "DELETE" });
 
         if (response.ok) {
-            // Xóa thẻ HTML có ID tương ứng để tạo hiệu ứng biến mất lập tức
-            const card = document.querySelector(`#fav-item-${favId}`);
+            const domId = favId !== null && favId !== undefined ? favId : restaurantId;
+            const card = document.querySelector(`#fav-item-${domId}`);
             if (card) card.remove();
 
             // Cập nhật lại mảng dữ liệu gốc
-            allFavorites = allFavorites.filter(item => item.id !== favId);
+            allFavorites = allFavorites.filter(item => {
+                const res = item.restaurant ? item.restaurant : item;
+                if (favId !== null && favId !== undefined) return item.id !== favId;
+                return res.id !== restaurantId;
+            });
 
-            // Kiểm tra nếu mảng trống thì hiện thông báo "Chưa có nhà hàng"
             if (allFavorites.length === 0) {
                 document.querySelector("#noResults").style.display = "block";
             }
         } else {
-            alert("Lỗi hủy yêu thích");
+            const text = await response.text();
+            alert("Lỗi hủy yêu thích: " + text);
         }
     } catch (e) {
         console.error("Lỗi:", e);
