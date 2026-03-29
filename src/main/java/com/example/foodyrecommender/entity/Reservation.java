@@ -68,7 +68,7 @@ public class Reservation {
 
         // Cẩn tắc vô áy náy: Nếu status vẫn bị null thì ép lại lần nữa
         if (this.status == null) {
-            this.status = "Chờ xác nhận";
+            this.status = "PENDING";
         }
     }
 }

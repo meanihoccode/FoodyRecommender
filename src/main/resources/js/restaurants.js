@@ -147,7 +147,7 @@ function renderRestaurants(list, isAppend) {
                         <p class="card-text small fw-bold text-danger mb-3">
                             <i class="fas fa-tag me-1"></i>${r.priceAverage || 'Liên hệ'}
                         </p>
-                        <a href="/restaurant-detail.html?id=${r.id}" class="btn btn-outline-danger btn-sm w-100 rounded-pill fw-bold">
+                        <a href="/restaurant-detail?id=${r.id}" class="btn btn-outline-danger btn-sm w-100 rounded-pill fw-bold">
                             Xem chi tiết
                         </a>
                     </div>
