@@ -33,6 +33,16 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/users/{id}")
+    public ResponseEntity<List<Reservation>> getReservationsByUser(@PathVariable int id) {
+        List<Reservation> reservation = reservationService.getReservationsByUser(id);
+        if (reservation != null) {
+            return ResponseEntity.ok(reservation);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
         try {
@@ -57,9 +67,23 @@ public class ReservationController {
         }
     }
 
+// Trong file ReservationController.java
+
+    @PutMapping("/cancellation/{id}")
+    public ResponseEntity<Reservation> cancelReservation(@PathVariable int id) {
+        // Gọi hàm hủy chuyên biệt từ Service
+        Reservation cancelledReservation = reservationService.cancelReservation(id);
+
+        if (cancelledReservation != null) {
+            return ResponseEntity.ok(cancelledReservation);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable int id) {
-        reservationService.deleteReservation(id);
+        reservationService.cancelReservation(id);
         return ResponseEntity.noContent().build();
     }
 }

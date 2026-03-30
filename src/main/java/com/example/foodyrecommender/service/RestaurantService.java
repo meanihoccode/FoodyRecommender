@@ -1,9 +1,13 @@
 package com.example.foodyrecommender.service;
 
+import com.example.foodyrecommender.entity.Reservation;
 import com.example.foodyrecommender.entity.Restaurant;
+import com.example.foodyrecommender.repository.ReservationRepository;
 import com.example.foodyrecommender.repository.RestaurantRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,6 +31,9 @@ public class RestaurantService {
     }
 
 
+    public Page<Restaurant> searchRestaurants(String keyword, String category, Pageable pageable) {
+        return restaurantRepository.searchRestaurants(keyword, category, pageable);
+    }
     // Trong RestaurantService.java
     public List<Restaurant> getRestaurantsByIds(List<Integer> ids) {
         // findAllById sẽ tự động tạo câu lệnh SQL: SELECT * FROM restaurants WHERE id IN (...)

@@ -54,27 +54,7 @@
                 <span class="category-badge active" data-category="all">
                     <i class="fas fa-th me-1"></i>Tất cả
                 </span>
-                <span class="category-badge" data-category="Phở">
-                    <i class="fas fa-bowl-food me-1"></i>Phở
-                </span>
-                <span class="category-badge" data-category="Cơm">
-                    <i class="fas fa-bowl-rice me-1"></i>Cơm
-                </span>
-                <span class="category-badge" data-category="Bún">
-                    <i class="fas fa-utensils me-1"></i>Bún
-                </span>
-                <span class="category-badge" data-category="Lẩu">
-                    <i class="fas fa-fire me-1"></i>Lẩu
-                </span>
-                <span class="category-badge" data-category="Nướng">
-                    <i class="fas fa-drumstick-bite me-1"></i>Nướng
-                </span>
-                <span class="category-badge" data-category="Hải sản">
-                    <i class="fas fa-shrimp me-1"></i>Hải sản
-                </span>
-                <span class="category-badge" data-category="Đồ uống">
-                    <i class="fas fa-mug-hot me-1"></i>Đồ uống
-                </span>
+                <!--Load Categories -->
             </div>
         </div>
 
@@ -99,7 +79,12 @@
 
         <!-- Restaurants Grid -->
         <div class="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 mb-5" id="restaurantsContainer">
-            <!-- Danh sách nhà hàng sẽ được load tại đây -->
+        </div>
+
+        <div class="text-center mt-4" id="loadMoreContainer" style="display: none;">
+            <button id="loadMoreBtn" class="btn btn-outline-danger px-4 rounded-pill fw-bold">
+                <i class="fas fa-chevron-down me-2"></i>Xem thêm
+            </button>
         </div>
 
         <!-- No Results -->

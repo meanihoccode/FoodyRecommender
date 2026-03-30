@@ -15,7 +15,7 @@ public class User_SavedService {
     @Autowired
     User_SavedRepository user_SavedRepository;
 
-    public List<Restaurant> getSavedRestaurantsByUserId(long userId) {
+    public List<Restaurant> getSavedRestaurantsByUserId(int userId) {
         return user_SavedRepository.findSavedRestaurantsByUserId(userId);
     }
 
@@ -23,7 +23,15 @@ public class User_SavedService {
         return user_SavedRepository.save(user_saved);
     }
 
-    public void deleteUser_Saved(long userId, long restaurantId) {
+    public void deleteUser_Saved(int userId, int restaurantId) {
         user_SavedRepository.deleteByUserIdAndRestaurantId(userId, restaurantId);
+    }
+
+    public boolean existsById(long id) {
+        return user_SavedRepository.existsById(id);
+    }
+
+    public void deleteById(long id) {
+        user_SavedRepository.deleteById(id);
     }
 }

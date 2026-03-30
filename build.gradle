@@ -29,6 +29,7 @@ dependencies {
     implementation 'org.hibernate.validator:hibernate-validator:8.0.1.Final'
     implementation 'com.mysql:mysql-connector-j:8.0.33'
     implementation 'org.springframework.boot:spring-boot-devtools'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 
     // ✅ JWT Dependencies
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'

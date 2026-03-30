@@ -1,112 +1,73 @@
-// ========== EVENT LISTENER ==========
-// Khi form submit (nhấn Enter hoặc click button)
-document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    handleLogin();
-});
+// Gắn sự kiện trực tiếp cho form
+document.getElementById('loginForm').addEventListener('submit', handleLogin);
 
-// ========== LOGIN FUNCTION ==========
-async function handleLogin() {
-    console.log('handleLogin function called');
-    const email = document.getElementById('email').value;
+async function handleLogin(e) {
+    // 1. Chặn load lại trang
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const errorMsg = document.getElementById('errorMsg');
 
-    console.log('Email:', email, 'Password:', password);
-
-    // Validate input
-    if (!email || !password) {
-        errorMsg.textContent = 'Vui lòng nhập email và mật khẩu';
+    // Hàm tiện ích hiển thị lỗi
+    const showError = (msg) => {
+        errorMsg.textContent = msg;
         errorMsg.classList.remove('d-none');
+    };
+
+    // 2. Validate cơ bản
+    if (!email || !password) {
+        showError('Vui lòng nhập đầy đủ email và mật khẩu.');
         return;
     }
 
     try {
-        console.log('Sending login request for:', email);
-
-        // Gọi API login
+        // 3. Gọi API Đăng nhập
         const response = await fetch("/api/user/login", {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, password })
         });
-
-        console.log('Response status:', response.status);
-        console.log('Response ok:', response.ok);
 
         if (response.ok) {
             const user = await response.json();
-            console.log('Login successful! User:', user);
-            console.log('User ID type:', typeof user.id, 'Value:', user.id);
-            console.log('User fullName type:', typeof user.fullName, 'Value:', user.fullName);
 
-            // Kiểm tra dữ liệu user
             if (!user.id) {
-                console.error('User ID không hợp lệ:', user);
-                errorMsg.textContent = 'Lỗi: Dữ liệu người dùng không hợp lệ';
-                errorMsg.classList.remove('d-none');
+                showError('Lỗi: Dữ liệu tài khoản không hợp lệ.');
                 return;
             }
 
-            // Lưu thông tin user vào localStorage
-            const userId = String(user.id);
-            const userEmail = user.email || '';
-            const userFullName = user.fullName || '';
+            // 4. Lưu vào LocalStorage (Lưu xong là có liền, không cần chờ)
+            localStorage.setItem('userId', String(user.id));
+            localStorage.setItem('userEmail', user.email || '');
+            localStorage.setItem('userFullName', user.fullName || '');
 
-            console.log('Saving to localStorage:');
-            console.log('userId:', userId);
-            console.log('userEmail:', userEmail);
-            console.log('userFullName:', userFullName);
+            // LƯU Ý MỚI: Lưu thêm Role (Quyền) để lát nữa làm Admin
+            const userRole = user.role || 'USER';
+            localStorage.setItem('userRole', userRole);
 
-            localStorage.setItem('userId', userId);
-            localStorage.setItem('userEmail', userEmail);
-            localStorage.setItem('userFullName', userFullName);
-
-            // Verify localStorage
-            console.log('LocalStorage after save:');
-            console.log('userId:', localStorage.getItem('userId'));
-            console.log('userEmail:', localStorage.getItem('userEmail'));
-            console.log('userFullName:', localStorage.getItem('userFullName'));
-
-            // Xóa thông báo lỗi
-            errorMsg.classList.add('d-none');
-
-            // Chuyển hướng tới home page (sau 500ms để đảm bảo localStorage được save)
-            console.log('Redirecting to /home...');
-            setTimeout(() => {
+            // 5. CHUYỂN HƯỚNG THÔNG MINH (Role-Based Routing)
+            if (userRole === 'ADMIN') {
+                // Nếu là Admin -> Cho vào thẳng khu vực quản trị
+                window.location.href = '/admin-dashboard';
+            } else {
+                // Nếu là Khách -> Cho ra trang chủ tìm quán ăn
                 window.location.href = '/home';
-            }, 500);
-        } else {
-            // Xử lý lỗi - parse JSON từ error response
-            let errorMessage = 'Đăng nhập thất bại';
-
-            try {
-                const errorData = await response.json();
-                console.log('Error response data:', errorData);
-                errorMessage = errorData.message || errorMessage;
-            } catch (parseError) {
-                console.log('Could not parse error JSON, using default message');
-                if (response.status === 401) {
-                    errorMessage = 'Email hoặc mật khẩu không chính xác';
-                } else if (response.status === 500) {
-                    errorMessage = 'Lỗi server. Vui lòng thử lại sau';
-                } else if (response.status === 400) {
-                    errorMessage = 'Email hoặc mật khẩu không hợp lệ';
-                }
             }
 
-            console.log('Setting error message:', errorMessage);
-            errorMsg.textContent = errorMessage;
-            errorMsg.classList.remove('d-none');
+        } else {
+            // 6. Xử lý Lỗi từ Backend báo về
+            let errorMessage = 'Email hoặc mật khẩu không chính xác.';
+            try {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } catch (err) {
+                if (response.status === 500) errorMessage = 'Hệ thống đang bận. Vui lòng thử lại sau.';
+            }
+            showError(errorMessage);
         }
     } catch (error) {
-        console.error('Lỗi:', error);
-        errorMsg.textContent = 'Lỗi kết nối đến server';
-        errorMsg.classList.remove('d-none');
+        console.error('Lỗi Login:', error);
+        showError('Mất kết nối đến máy chủ. Kiểm tra lại mạng của bạn!');
     }
 }

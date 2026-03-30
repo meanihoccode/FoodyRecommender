@@ -1,7 +1,9 @@
 package com.example.foodyrecommender.service;
 
 import com.example.foodyrecommender.entity.Reservation;
+import com.example.foodyrecommender.entity.User;
 import com.example.foodyrecommender.repository.ReservationRepository;
+import com.example.foodyrecommender.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -16,6 +19,8 @@ import java.util.List;
 public class ReservationService {
     @Autowired
     private ReservationRepository reservationRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public Reservation getReservationById(long reservationId) {
         return reservationRepository.findById(reservationId);
@@ -73,7 +78,22 @@ public class ReservationService {
         return null;
     }
 
-    public void deleteReservation(int reservationId) {
-        reservationRepository.deleteById(reservationId);
+    public List<Reservation> getReservationsByUser(int userId) {
+        // UserRepository methods are instance methods (Spring Data bean), not static
+        User existingUser = userRepository.findUserById(userId);
+        if (existingUser == null) {
+            return Collections.emptyList();
+        }
+        // ReservationRepository currently exposes findByUser(long userId)
+        return reservationRepository.findByUser(existingUser.getId());
+    }
+
+    @Transactional
+    public Reservation cancelReservation(int id) {
+        // 1. Chạy lệnh UPDATE thẳng xuống Database (Bỏ qua hoàn toàn Validation)
+        reservationRepository.cancelReservationDirectly(id);
+
+        // 2. Tận dụng luôn hàm getReservationById có sẵn của bạn để lấy dữ liệu mới
+        return getReservationById(id);
     }
 }

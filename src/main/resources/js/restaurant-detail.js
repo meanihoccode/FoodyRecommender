@@ -313,6 +313,12 @@ window.scrollTo(0, 0);
 document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo(0, 0);
 });
+
+document.getElementById('logoutBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    localStorage.clear();
+    window.location.href = '/login';
+});
 // Đừng quên gọi hàm để nó chạy khi trang web tải xong nhé!
 document.addEventListener('DOMContentLoaded', () => {
     loadRecommendedRestaurant();
