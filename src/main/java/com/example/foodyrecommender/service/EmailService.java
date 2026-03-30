@@ -10,10 +10,12 @@ public class EmailService {
 
     @Autowired
     private JavaMailSender mailSender;
-
+    @Autowired
+    private UserService userService;
     public void sendOtpEmail(String toEmail, String otp) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
+
         message.setSubject("Mã xác thực Đăng ký tài khoản Foody");
         message.setText("Chào bạn,\n\n" +
                 "Mã OTP để kích hoạt tài khoản của bạn là: " + otp + "\n" +
