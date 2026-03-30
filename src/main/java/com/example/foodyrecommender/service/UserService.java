@@ -102,7 +102,7 @@ public class UserService {
 
         // 3. DB lưu ok rồi thì mới sai Bưu tá đi gửi mail
         new Thread(() -> {
-            emailService.sendOtpEmail(email, otp);
+            emailService.sendOtpEmail(user.getEmail(), user.getFullName(), otp);
         }).start();
 
         return savedUser;
@@ -130,7 +130,7 @@ public class UserService {
 
         // Gọi EmailService gửi mail đi (Có thể dùng luồng riêng để web không bị đơ chờ gửi mail)
         new Thread(() -> {
-            emailService.sendOtpEmail(savedUser.getEmail(), otp);
+            emailService.sendOtpEmail(savedUser.getEmail(),savedUser.getFullName(), otp);
         }).start();
 
         return savedUser;
