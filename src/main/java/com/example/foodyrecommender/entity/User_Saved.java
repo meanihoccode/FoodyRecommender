@@ -1,5 +1,6 @@
 package com.example.foodyrecommender.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,8 @@ public class User_Saved {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    // Khi trả về JSON, chỉ lấy id của user, giấu hết email, fullName... cho nhẹ
+    @JsonIgnoreProperties({"email", "password", "role"})
     private User user;
 
     @ManyToOne

@@ -8,4 +8,7 @@ public interface UserRepository   extends JpaRepository<User, Integer>
     User findUserByEmail(String email);
 
     User findUserById(long id);
+
+    // Thêm vào trong UserRepository interface
+    User findByEmail(String email);
 }
