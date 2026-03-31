@@ -42,17 +42,33 @@ public class UserController {
         // Thông báo lỗi chung để bảo mật
         String errorMessage = "Email hoặc mật khẩu không chính xác";
 
-        // Kiểm tra user có tồn tại không
-        if (user == null) {
+        // Kiểm tra user có tồn tại không và password có khớp không
+        if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return ResponseEntity.status(401).body(new ErrorResponse(errorMessage));
         }
 
-        // Kiểm tra password có khớp không
-        if (!passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
-            return ResponseEntity.status(401).body(new ErrorResponse(errorMessage));
+        // ==========================================
+        // LẮP 2 TRẠM KIỂM SOÁT BẢO MẬT TẠI ĐÂY
+        // ==========================================
+
+        // Trạm 1: Bắt buộc phải xác thực OTP
+        if (!user.getIsVerified()) {
+            // Ném về mã 403 (Forbidden) và gắn cờ "NOT_VERIFIED" cho Frontend dễ nhận biết
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of(
+                            "message", "Tài khoản chưa được xác thực! Vui lòng kiểm tra email để lấy mã OTP.",
+                            "errorCode", "NOT_VERIFIED",
+                            "email", user.getEmail()
+                    ));
         }
 
-        // Login thành công
+        // Trạm 2: Quyền lực của Admin (Chặn tài khoản bị khóa)
+        if (!user.getIsActive()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ErrorResponse("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ Admin!"));
+        }
+
+        // Vượt qua hết thì cho phép Login thành công
         return ResponseEntity.ok(user);
     }
 
