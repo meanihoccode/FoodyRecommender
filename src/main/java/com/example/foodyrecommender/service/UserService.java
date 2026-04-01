@@ -162,4 +162,15 @@ public class UserService {
 
         return false; // Sai mã
     }
+
+    public User lockAccount(int id) {
+        User user = userRepository.findUserById(id);
+        if (user == null) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+        if (user.getIsActive()) user.setIsActive(false);
+        else  user.setIsActive(true);
+        userRepository.save(user);
+        return user;
+    }
 }

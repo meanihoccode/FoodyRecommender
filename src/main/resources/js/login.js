@@ -59,6 +59,7 @@ async function handleLogin(e) {
         } else {
             let errorMessage = 'Email hoặc mật khẩu không chính xác.';
             try {
+
                 const errorData = await response.json();
 
                 // ======== BẮT SỰ KIỆN CHƯA XÁC THỰC ========

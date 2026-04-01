@@ -96,4 +96,8 @@ public class ReservationService {
         // 2. Tận dụng luôn hàm getReservationById có sẵn của bạn để lấy dữ liệu mới
         return getReservationById(id);
     }
+
+    public long countReservations() {
+        return reservationRepository.count();
+    }
 }

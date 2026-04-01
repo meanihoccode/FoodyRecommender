@@ -3,6 +3,7 @@ package com.example.foodyrecommender.api;
 import com.example.foodyrecommender.dto.ChangePasswordRequest;
 import com.example.foodyrecommender.dto.ErrorResponse;
 import com.example.foodyrecommender.dto.LoginRequest;
+import com.example.foodyrecommender.entity.Reservation;
 import com.example.foodyrecommender.entity.User;
 import com.example.foodyrecommender.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,6 +77,18 @@ public class UserController {
     public ResponseEntity<Void> createUser(@RequestBody User user) {
         userService.saveUser(user);
         return ResponseEntity.status(201).build();
+    }
+
+    @PutMapping("/lockacc/{id}")
+    public ResponseEntity<User> cancelReservation(@PathVariable int id) {
+        // Gọi hàm hủy chuyên biệt từ Service
+        User lockUser= userService.lockAccount(id);
+
+        if (lockUser != null) {
+            return ResponseEntity.ok(lockUser);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PutMapping("/{id}")

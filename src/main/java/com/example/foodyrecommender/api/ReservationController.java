@@ -43,6 +43,11 @@ public class ReservationController {
         }
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> getReservationCount() {
+        return ResponseEntity.ok(reservationService.countReservations());
+    }
+
     @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
         try {
