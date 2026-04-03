@@ -8,12 +8,16 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 @Service
 @Transactional
 public class ReservationService {
@@ -24,6 +28,18 @@ public class ReservationService {
 
     public Reservation getReservationById(long reservationId) {
         return reservationRepository.findById(reservationId);
+    }
+
+    public Page<Reservation> getReservationsWithPagination(int page, int size, String keyword, String status, String startDateStr, String endDateStr) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+        String searchKeyword = (keyword == null || keyword.trim().isEmpty()) ? null : "%" + keyword.trim() + "%";
+        String searchStatus = (status == null || status.equals("ALL")) ? null : status;
+
+        LocalDate startDate = (startDateStr != null && !startDateStr.trim().isEmpty()) ? LocalDate.parse(startDateStr) : null;
+        LocalDate endDate = (endDateStr != null && !endDateStr.trim().isEmpty()) ? LocalDate.parse(endDateStr) : null;
+
+        return reservationRepository.searchAndFilter(searchKeyword, searchStatus, startDate, endDate, pageable);
     }
 
     public List<Reservation> getReservationsByUserId(long userId) {
@@ -92,6 +108,24 @@ public class ReservationService {
     public Reservation cancelReservation(int id) {
         // 1. Chạy lệnh UPDATE thẳng xuống Database (Bỏ qua hoàn toàn Validation)
         reservationRepository.cancelReservationDirectly(id);
+
+        // 2. Tận dụng luôn hàm getReservationById có sẵn của bạn để lấy dữ liệu mới
+        return getReservationById(id);
+    }
+
+    @Transactional
+    public Reservation confirmReservation(int id) {
+        // 1. Chạy lệnh UPDATE thẳng xuống Database (Bỏ qua hoàn toàn Validation)
+        reservationRepository.confirmReservationDirectly(id);
+
+        // 2. Tận dụng luôn hàm getReservationById có sẵn của bạn để lấy dữ liệu mới
+        return getReservationById(id);
+    }
+
+    @Transactional
+    public Reservation completeReservation(int id) {
+        // 1. Chạy lệnh UPDATE thẳng xuống Database (Bỏ qua hoàn toàn Validation)
+        reservationRepository.completeReservationDirectly(id);
 
         // 2. Tận dụng luôn hàm getReservationById có sẵn của bạn để lấy dữ liệu mới
         return getReservationById(id);

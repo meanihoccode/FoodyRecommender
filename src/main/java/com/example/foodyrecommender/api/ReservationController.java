@@ -4,6 +4,7 @@ package com.example.foodyrecommender.api;
 import com.example.foodyrecommender.entity.Reservation;
 import com.example.foodyrecommender.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,19 @@ public class ReservationController {
     public ResponseEntity<List<Reservation>> getAllReservations() {
         List<Reservation> reservation = reservationService.getAllReservations();
         return ResponseEntity.ok(reservation);
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<Page<Reservation>> getPagedReservations(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false, defaultValue = "ALL") String status,
+            @RequestParam(required = false) String startDate,
+            @RequestParam(required = false) String endDate) {
+
+        Page<Reservation> reservationPage = reservationService.getReservationsWithPagination(page, size, keyword, status, startDate, endDate);
+        return ResponseEntity.ok(reservationPage);
     }
 
     @GetMapping("/{id}")
@@ -85,6 +99,30 @@ public class ReservationController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PutMapping("/confirmation/{id}")
+    public ResponseEntity<Reservation> confirmReservation(@PathVariable int id) {
+        // Gọi hàm hủy chuyên biệt từ Service
+        Reservation confirmReservation = reservationService.confirmReservation(id);
+
+        if (confirmReservation != null) {
+            return ResponseEntity.ok(confirmReservation);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @PutMapping("/completion/{id}")
+    public ResponseEntity<Reservation> completeReservation(@PathVariable int id) {
+        // Gọi hàm hủy chuyên biệt từ Service
+        Reservation completeReservation = reservationService.completeReservation(id);
+
+        if (completeReservation != null) {
+            return ResponseEntity.ok(completeReservation);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReservation(@PathVariable int id) {
