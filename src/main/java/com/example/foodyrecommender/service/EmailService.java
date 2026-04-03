@@ -26,7 +26,7 @@ public class EmailService {
                         "------------------------------------------\n" +
                         "Mã OTP của bạn là: %s\n" +
                         "------------------------------------------\n" +
-                        "Lưu ý: Mã này có hiệu lực trong vòng 5 phút.\n\n" +
+                        "Lưu ý: Mã này có hiệu lực trong vòng 90 giây.\n\n" +
                         "Nếu không phải bạn thực hiện đăng ký, hãy bỏ qua email này.\n\n" +
                         "Trân trọng,\n" +
                         "Đội ngũ hỗ trợ Foody.",

@@ -100,7 +100,7 @@ async function loadReservations () {
                                     <i class="fas fa-lock me-1"></i>Hết hạn hủy
                                 </button>
                                 <div class="text-danger fw-bold" style="font-size: 0.7rem;">
-                                    Sắp tới giờ ăn. Gọi nhà hàng để hỗ trợ.
+                                    Quá hạn hủy. Xin gọi CSKH: 0358764465
                                 </div>
                             </div>
                         `;

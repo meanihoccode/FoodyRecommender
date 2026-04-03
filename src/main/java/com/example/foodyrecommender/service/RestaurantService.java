@@ -55,7 +55,9 @@ public class RestaurantService {
         return null;
     }
 
-
+    public long countRestaurants() {
+        return restaurantRepository.count();
+    }
     public void deleteRestaurant(int id) {
         restaurantRepository.deleteById(id);
     }

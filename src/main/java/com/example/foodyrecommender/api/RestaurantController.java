@@ -4,6 +4,7 @@ package com.example.foodyrecommender.api;
 import com.example.foodyrecommender.entity.Restaurant;
 import com.example.foodyrecommender.repository.RestaurantRepository;
 import com.example.foodyrecommender.service.RestaurantService;
+import com.example.foodyrecommender.service.UserService;
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,8 @@ public class RestaurantController {
 
     @Autowired
     private RestaurantRepository restaurantRepository;
+    @Autowired
+    private UserService userService;
 
     @GetMapping
     public ResponseEntity<List<Restaurant>> getAllRestaurants() {
@@ -138,4 +141,8 @@ public class RestaurantController {
         return ResponseEntity.ok("Đã cập nhật giá minPrice thành công cho " + count + " nhà hàng!");
     }
 
+    @GetMapping("/count")
+    public ResponseEntity<Long> countRestaurants() {
+        return ResponseEntity.ok(restaurantService.countRestaurants());
+    }
 }
