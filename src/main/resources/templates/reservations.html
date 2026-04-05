@@ -144,7 +144,31 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="ratingModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow" style="border-radius: 16px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-success"><i class="fas fa-star me-2"></i>Đánh giá trải nghiệm</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <h6 class="mb-4">Bạn cảm thấy thế nào về bữa ăn tại <br><strong id="ratingRestaurantName" class="text-primary fs-5">Nhà hàng</strong>?</h6>
 
+                <div class="d-flex justify-content-center gap-2 mb-3" id="starRatingContainer">
+                    <i class="far fa-star fa-2x text-warning rating-star" data-value="1" style="cursor: pointer; transition: 0.2s;"></i>
+                    <i class="far fa-star fa-2x text-warning rating-star" data-value="2" style="cursor: pointer; transition: 0.2s;"></i>
+                    <i class="far fa-star fa-2x text-warning rating-star" data-value="3" style="cursor: pointer; transition: 0.2s;"></i>
+                    <i class="far fa-star fa-2x text-warning rating-star" data-value="4" style="cursor: pointer; transition: 0.2s;"></i>
+                    <i class="far fa-star fa-2x text-warning rating-star" data-value="5" style="cursor: pointer; transition: 0.2s;"></i>
+                </div>
+                <p id="ratingText" class="text-muted fw-bold mb-0">Vui lòng chọn số sao</p>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center">
+                <button type="button" class="btn btn-success px-5" id="submitRatingBtn" style="border-radius: 8px;">Gửi đánh giá</button>
+            </div>
+        </div>
+    </div>
+</div>
 <footer class="bg-dark text-white text-center py-4 mt-5">
     <div class="container">
         <p class="mb-2">© 2026 Hệ thống Gợi ý Món ăn - Foody Recommend</p>

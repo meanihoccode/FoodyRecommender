@@ -110,10 +110,10 @@ async function loadReservations () {
                         `;
                     }
                 }
-                // 3. NÚT CHO ĐƠN HOÀN THÀNH (Ví dụ: Nút Đặt lại hoặc Đánh giá)
                 else if (statusText === "Đã hoàn thành") {
                     actionButtonsHtml = `
-                        <button class="btn btn-sm btn-outline-success border-0 fw-bold" onclick="alert('Tính năng đánh giá đang phát triển!')">
+                        <button class="btn btn-sm btn-outline-success border-0 fw-bold" 
+                                onclick="openRatingModal(${res.id}, ${res.restaurant?.id}, '${escapedRestName}')">
                             <i class="fas fa-star me-1"></i>Đánh giá
                         </button>
                     `;
@@ -232,6 +232,109 @@ document.getElementById('logoutBtn').addEventListener('click', function(e) {
     e.preventDefault();
     localStorage.clear();
     window.location.href = '/login';
+});
+
+/* ================= XỬ LÝ SỰ KIỆN ĐÁNH GIÁ (RATING) ================= */
+let currentRating = 0;
+let currentRatingReservationId = null;
+let currentRatingRestaurantId = null;
+
+// Hàm mở Modal đánh giá
+function openRatingModal(reservationId, restaurantId, restaurantName) {
+    currentRatingReservationId = reservationId;
+    currentRatingRestaurantId = restaurantId;
+    currentRating = 0; // Reset điểm mỗi lần mở
+
+    document.getElementById('ratingRestaurantName').innerText = restaurantName;
+    document.getElementById('ratingText').innerText = "Vui lòng chọn số sao";
+    document.getElementById('ratingText').className = "text-muted fw-bold mb-0";
+
+    updateStarUI(0); // Reset UI sao về rỗng
+
+    const modal = new bootstrap.Modal(document.getElementById('ratingModal'));
+    modal.show();
+}
+
+// Xử lý hiệu ứng di chuột và click cho các ngôi sao
+document.querySelectorAll('.rating-star').forEach(star => {
+    // Khi Hover chuột vào: Sáng tạm thời
+    star.addEventListener('mouseover', function() {
+        const val = this.getAttribute('data-value');
+        updateStarUI(val);
+    });
+
+    // Khi chuột rời đi: Trả về trạng thái của số điểm đã click
+    star.addEventListener('mouseout', function() {
+        updateStarUI(currentRating);
+    });
+
+    // Khi Click: Chốt điểm
+    star.addEventListener('click', function() {
+        currentRating = parseInt(this.getAttribute('data-value'));
+
+        // Mảng text tương ứng với 1-5 sao
+        const texts = ["", "Tệ", "Không hài lòng", "Bình thường", "Hài lòng", "Tuyệt vời!"];
+        const textEl = document.getElementById('ratingText');
+        textEl.innerText = texts[currentRating];
+        textEl.className = "text-success fw-bold fs-5 mb-0";
+
+        updateStarUI(currentRating);
+    });
+});
+
+// Hàm vẽ lại UI ngôi sao (Đổi class far -> fas)
+function updateStarUI(val) {
+    document.querySelectorAll('.rating-star').forEach(s => {
+        if (s.getAttribute('data-value') <= val) {
+            s.classList.remove('far'); // Bỏ sao rỗng
+            s.classList.add('fas');    // Thêm sao đặc
+        } else {
+            s.classList.remove('fas');
+            s.classList.add('far');
+        }
+    });
+}
+
+// Gửi API Đánh giá
+document.getElementById('submitRatingBtn').addEventListener('click', async function() {
+    if (currentRating === 0) {
+        alert("Vui lòng click chọn số sao trước khi gửi!");
+        return;
+    }
+
+    // Đóng gói dữ liệu giống y hệt cấu trúc Entity Rating.java
+    const payload = {
+        user: { id: getLoggedInUserId() },
+        restaurant: { id: currentRatingRestaurantId },
+        reservation: { id: currentRatingReservationId },
+        score: currentRating
+    };
+
+    this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang xử lý...';
+    this.disabled = true;
+
+    try {
+        const response = await fetch('/api/ratings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+            alert("Cảm ơn bạn! Đánh giá đã được ghi nhận để cải thiện thuật toán Gợi ý.");
+            const modalElement = document.getElementById('ratingModal');
+            bootstrap.Modal.getInstance(modalElement).hide();
+            // Load lại danh sách để reset giao diện
+            loadReservations();
+        } else {
+            alert("Bạn đã đánh giá đơn này rồi, hoặc hệ thống đang bận!");
+        }
+    } catch (e) {
+        alert("Lỗi kết nối mạng!");
+    } finally {
+        this.innerHTML = 'Gửi đánh giá';
+        this.disabled = false;
+    }
 });
 
 document.addEventListener('DOMContentLoaded', loadReservations);
