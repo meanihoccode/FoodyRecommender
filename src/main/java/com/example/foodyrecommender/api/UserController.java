@@ -7,6 +7,7 @@ import com.example.foodyrecommender.entity.Reservation;
 import com.example.foodyrecommender.entity.User;
 import com.example.foodyrecommender.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +34,18 @@ public class UserController {
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable int id) {
         return ResponseEntity.ok(userService.getUserById(id));
+    }
+
+    @GetMapping("/paged")
+    public ResponseEntity<Page<User>> getPagedUsers(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "4") int size,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false, defaultValue = "ALL") String isVerified,
+            @RequestParam(required = false, defaultValue = "ALL") String isActive
+            ) {
+        Page<User> userPage = userService.getUsersWithPagination(page,size,keyword,isVerified,isActive);
+        return ResponseEntity.ok(userPage);
     }
 
     @PostMapping("/login")

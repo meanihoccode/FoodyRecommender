@@ -27,7 +27,7 @@ public class ReservationController {
     @GetMapping("/paged")
     public ResponseEntity<Page<Reservation>> getPagedReservations(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size,
+            @RequestParam(defaultValue = "4") int size,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false, defaultValue = "ALL") String status,
             @RequestParam(required = false) String startDate,

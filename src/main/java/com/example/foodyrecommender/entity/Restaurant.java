@@ -44,7 +44,11 @@ public class Restaurant {
     private String imageUrl;
 
     @Column(name = "rating")
-    private Float rating;
+    private Double rating = 0.0;
+
+    // Bổ sung thêm biến đếm lượt đánh giá
+    @Column(name = "rating_count")
+    private Integer ratingCount = 0;
 
     @Column(name = "min_price")
     private Integer minPrice;

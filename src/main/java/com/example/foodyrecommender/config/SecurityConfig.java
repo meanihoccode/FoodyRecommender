@@ -35,6 +35,7 @@ public class SecurityConfig {
                                 "/favourites", "/favourites/**", "/favourite/**",
                                 "/css/**", "/js/**", "/img/**"
                                 , "/manage-reservations", "/manage-reservations/**"
+                                , "/manage-users", "/manage-users/**"
                         ).permitAll()
 
                         // 3. CHO PHÉP TRUY CẬP API LIÊN QUAN ĐẾN TÀI KHOẢN & OTP

@@ -88,7 +88,7 @@ function renderFavorites(dataToRender) {
             <div class="col" id="fav-item-${item.restaurant ? favId : restaurantId}">
                 <div class="card h-100 border-0 shadow-sm hover-shadow transition">
                     <div class="position-relative">
-                        <a href="/restaurant-detail.html?id=${res.id}">
+                        <a href="/restaurant-detail?id=${res.id}">
                             <img src="${res.imageUrl || 'https://via.placeholder.com/300x200'}" class="card-img-top rounded-top" style="height: 180px; object-fit: cover;">
                         </a>
                         <button onclick="removeFavorite(${restaurantId}, ${favId ?? 'null'})" class="btn btn-light btn-sm position-absolute top-0 end-0 m-2 rounded-circle text-danger shadow-sm">
@@ -101,7 +101,7 @@ function renderFavorites(dataToRender) {
                         <div class="mb-2 small">${starHtml} <span class="text-muted">(${res.rating || 0})</span></div>
                         <p class="card-text small text-muted text-truncate mb-2"><i class="fas fa-map-marker-alt me-1"></i>${res.address || 'Đang cập nhật'}</p>
                         <p class="card-text small fw-bold text-danger mb-3"><i class="fas fa-tag me-1"></i>${res.priceAverage || 'Liên hệ'}</p>
-                        <a href="/restaurant-detail.html?id=${res.id}" class="btn btn-outline-danger btn-sm w-100 rounded-pill fw-bold">Đặt bàn ngay</a>
+                        <a href="/restaurant-detail?id=${res.id}" class="btn btn-outline-danger btn-sm w-100 rounded-pill fw-bold">Đặt bàn ngay</a>
                     </div>
                 </div>
             </div>
