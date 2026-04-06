@@ -10,8 +10,8 @@ public class RecommendationTask {
 
     // Cron expression: Giây Phút Giờ Ngày Tháng Thứ
     // "0 0 2 * * ?" = Đúng 02:00:00 sáng mỗi ngày
-     @Scheduled(cron = "0 0 2 * * ?")
-    // @Scheduled(fixedDelay = 60000) // Đang test 60s/lần
+//     @Scheduled(cron = "0 0 2 * * ?")
+     @Scheduled(fixedDelay = 60000) // Đang test 60s/lần
     public void runPythonRecommendation() {
         System.out.println("--- BẮT ĐẦU CHẠY CẬP NHẬT GỢI Ý AI ---");
 
@@ -20,7 +20,7 @@ public class RecommendationTask {
             String pythonExePath = "D:/KtraGiuaKi/.venv/Scripts/python.exe";
 
             // 2. Đường dẫn đến file script của bạn
-            String pythonScriptPath = "D:/KtraGiuaKi/recommendation_engine.py";
+            String pythonScriptPath = "C:/Users/Admin/Documents/TTCS/FoodyRecommender/ai-engine/recommendation_engine.py";
 
             // 3. Thực thi bằng file pythonExePath vừa khai báo
             // Thêm cờ "-X" và "utf8" để ép Python in ra tiếng Việt chuẩn chỉ
