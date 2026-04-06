@@ -48,11 +48,11 @@ public class SecurityConfig {
                         ).permitAll()
 
                         // 4. CHO PHÉP CÁC API PUBLIC KHÁC (Tạm thời mở để làm FrontEnd cho dễ)
-                        .requestMatchers("/api/restaurants/**", "/api/recommendations/**", "/api/reservations", "/api/reservations/**").permitAll()
+                        .requestMatchers("/api/restaurants/**", "/api/recommendations/**", "/api/reservations", "/api/reservations/**", "/api/system", "/api/system/**").permitAll()
                         .requestMatchers("/api/user/**", "/api/reservations/users/**", "/api/user-saved/**","/api/ratings","/api/ratings").permitAll()
 
                         // 5. CÁC ENDPOINT KHÁC ĐỀU BỊ CHẶN
-                        .anyRequest().authenticated()
+                       // .anyRequest().authenticated()
                 )
                 // 6. TẮT TÍNH NĂNG FORM LOGIN MẶC ĐỊNH CỦA SPRING
                 // Vì chúng ta đã tự viết màn hình đăng nhập và xử lý bằng JS/API rồi

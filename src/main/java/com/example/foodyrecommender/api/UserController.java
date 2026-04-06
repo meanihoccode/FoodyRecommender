@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
@@ -115,13 +117,24 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("change-password/{id}")
-    public ResponseEntity<User> changePassword(@PathVariable int id, @RequestBody ChangePasswordRequest changePasswordRequest) {
-        User existUser = userService.changePassword(id,changePasswordRequest);
-        if (existUser == null) {
-            return ResponseEntity.notFound().build();
-        } else  {
-            return ResponseEntity.ok(existUser);
+// ... (Các API cũ giữ nguyên) ...
+
+    @PutMapping("/{id}/change-password")
+    public ResponseEntity<?> changePassword(@PathVariable int id, @RequestBody ChangePasswordRequest request) {
+        try {
+            // Gọi hàm xử lý trong Service
+            userService.changePassword(id, request.getOldPassword(), request.getNewPassword());
+
+            // Trả về JSON thành công
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Đổi mật khẩu thành công");
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+            // Trả về lỗi 400 (Bad Request) nếu sai mật khẩu cũ
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 

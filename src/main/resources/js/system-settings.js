@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Thay thế bằng API thật của bạn, nhớ truyền userId lấy từ localStorage nếu cần
                 const adminId = localStorage.getItem('userId');
-                const response = await fetch(`/api/users/${adminId}/change-password`, {
+                const response = await fetch(`/api/user/${adminId}/change-password`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ oldPassword: currentPw, newPassword: newPw })
