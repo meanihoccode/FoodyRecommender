@@ -59,7 +59,7 @@ async function loadRestaurantDetail(id) {
             // Tìm đến đoạn render sao trong loadRestaurantDetail:
             const restaurantRating = document.querySelector("#restaurantRating");
             const starHtml = renderStars(restaurant.rating);
-            restaurantRating.innerHTML = `${starHtml} (${restaurant.rating}/5)`;
+            restaurantRating.innerHTML = `${starHtml} (${restaurant.rating}/5) (${restaurant.ratingCount} lượt đánh giá)`;
 
             const restaurantImage = document.querySelector("#restaurantImage");
             restaurantImage.src = restaurant.imageUrl;
