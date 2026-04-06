@@ -111,12 +111,22 @@ async function loadReservations () {
                     }
                 }
                 else if (statusText === "Đã hoàn thành") {
-                    actionButtonsHtml = `
-                        <button class="btn btn-sm btn-outline-success border-0 fw-bold" 
-                                onclick="openRatingModal(${res.id}, ${res.restaurant?.id}, '${escapedRestName}')">
-                            <i class="fas fa-star me-1"></i>Đánh giá
-                        </button>
-                    `;
+                    if (res.isRated === true) {
+                        // NẾU ĐÃ RATE: Hiện nút xám, không cho bấm
+                        actionButtonsHtml = `
+                            <button class="btn btn-sm btn-secondary border-0 fw-bold opacity-75" disabled>
+                                <i class="fas fa-check-circle me-1"></i>Đã đánh giá
+                            </button>
+                        `;
+                    } else {
+                        // NẾU CHƯA RATE: Hiện nút xanh cho bấm
+                        actionButtonsHtml = `
+                            <button class="btn btn-sm btn-outline-success border-0 fw-bold" 
+                                    onclick="openRatingModal(${res.id}, ${res.restaurant?.id}, '${escapedRestName}')">
+                                <i class="fas fa-star me-1"></i>Đánh giá
+                            </button>
+                        `;
+                    }
                 }
 
                 const cardHtml = `

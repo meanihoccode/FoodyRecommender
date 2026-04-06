@@ -48,7 +48,7 @@ public class SecurityConfig {
 
                         // 4. CHO PHÉP CÁC API PUBLIC KHÁC (Tạm thời mở để làm FrontEnd cho dễ)
                         .requestMatchers("/api/restaurants/**", "/api/recommendations/**", "/api/reservations", "/api/reservations/**").permitAll()
-                        .requestMatchers("/api/user/**", "/api/reservations/users/**", "/api/user-saved/**").permitAll()
+                        .requestMatchers("/api/user/**", "/api/reservations/users/**", "/api/user-saved/**","/api/ratings","/api/ratings").permitAll()
 
                         // 5. CÁC ENDPOINT KHÁC ĐỀU BỊ CHẶN
                         .anyRequest().authenticated()

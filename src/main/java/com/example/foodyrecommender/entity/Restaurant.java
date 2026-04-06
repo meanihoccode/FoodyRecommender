@@ -32,7 +32,6 @@ public class Restaurant {
     private String category;
 
     @NotBlank(message = "Giá trung bình không được trống")
-    @DecimalMin(value = "0.1", message = "Giá TB phải lớn hơn hoặc bằng 0")
     @Column(name = "price_average")
     private String priceAverage;
 
