@@ -36,7 +36,7 @@ public class SecurityConfig {
                                 "/css/**", "/js/**", "/img/**"
                                 , "/manage-reservations", "/manage-reservations/**"
                                 , "/manage-users", "/manage-users/**","/manage-restaurants"
-                                ,"/manage-restaurants/**"
+                                ,"/manage-restaurants/**", "/system-settings", "/system-settings/**"
                         ).permitAll()
 
                         // 3. CHO PHÉP TRUY CẬP API LIÊN QUAN ĐẾN TÀI KHOẢN & OTP
