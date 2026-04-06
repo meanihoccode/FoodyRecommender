@@ -30,6 +30,10 @@ public interface ReservationRepository extends JpaRepository<Reservation,Integer
     @Query("UPDATE Reservation r SET r.status = 'COMPLETED' WHERE r.id = :id")
     void completeReservationDirectly(@Param("id") int id);
 
+    @Modifying
+    @Query("UPDATE Reservation r SET r.isRated = true WHERE r.id = :id")
+    void markAsRated(@Param("id") int id);
+
         // Câu lệnh SQL "thần thánh" xử lý mọi trường hợp tìm kiếm
         @Query("SELECT r FROM Reservation r WHERE " +
                 "(:keyword IS NULL OR LOWER(r.contactName) LIKE LOWER(:keyword) OR r.contactPhone LIKE :keyword) AND " +

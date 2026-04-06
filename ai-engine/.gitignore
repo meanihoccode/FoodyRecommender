@@ -1,0 +1,12 @@
+# Bỏ qua môi trường ảo
+venv/
+env/
+.venv/
+
+# Bỏ qua các file cache của Python
+__pycache__/
+*.pyc
+
+# Bỏ qua cấu hình của phần mềm IDE (nếu dùng PyCharm/VSCode)
+.idea/
+.vscode/

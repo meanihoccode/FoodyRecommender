@@ -62,6 +62,9 @@ public class Reservation {
     private LocalDateTime createdAt;
 
     // Thần chú của Hibernate
+    @Column(name = "is_rated")
+    private Boolean isRated = false;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now(); // Tự động lấy giờ hiện tại

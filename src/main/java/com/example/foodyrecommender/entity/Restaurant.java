@@ -32,7 +32,6 @@ public class Restaurant {
     private String category;
 
     @NotBlank(message = "Giá trung bình không được trống")
-    @DecimalMin(value = "0.1", message = "Giá TB phải lớn hơn hoặc bằng 0")
     @Column(name = "price_average")
     private String priceAverage;
 
@@ -44,7 +43,11 @@ public class Restaurant {
     private String imageUrl;
 
     @Column(name = "rating")
-    private Float rating;
+    private Double rating = 0.0;
+
+    // Bổ sung thêm biến đếm lượt đánh giá
+    @Column(name = "rating_count")
+    private Integer ratingCount = 0;
 
     @Column(name = "min_price")
     private Integer minPrice;

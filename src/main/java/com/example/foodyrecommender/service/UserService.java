@@ -5,6 +5,10 @@ import com.example.foodyrecommender.entity.User;
 import com.example.foodyrecommender.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -83,6 +87,28 @@ public class UserService {
         }
     }
 
+    public Page<User> getUsersWithPagination(int page, int size, String keyword, String isVerified, String isActive) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("id").descending());
+
+        String searchKeyword = (keyword == null || keyword.trim().isEmpty()) ? null : "%" + keyword.trim() + "%";
+        Boolean searchVerified = null;
+        if ("TRUE".equalsIgnoreCase(isVerified)) {
+            searchVerified = true;  // Nếu Entity dùng Integer thì gán = 1
+        } else if ("FALSE".equalsIgnoreCase(isVerified)) {
+            searchVerified = false; // Nếu Entity dùng Integer thì gán = 0
+        }
+
+        // 3. Tiền xử lý Trạng thái hoạt động (String -> Boolean)
+        Boolean searchActive = null;
+        if ("TRUE".equalsIgnoreCase(isActive)) {
+            searchActive = true;    // = 1
+        } else if ("FALSE".equalsIgnoreCase(isActive)) {
+            searchActive = false;   // = 0
+        }
+
+        return userRepository.searchAndFilter(searchKeyword,searchVerified,searchActive, pageable);
+
+    }
     public User sendAgainEmail(String email) {
         // 1. Phải tìm User TRƯỚC TIÊN
         User user = userRepository.findByEmail(email); // (Hoặc findUserByEmail tùy tên hàm của bạn)

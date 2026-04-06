@@ -23,7 +23,7 @@ document.getElementById('confirmLogoutBtn').addEventListener('click', function()
 });
 
 let currentPage = 0; // Backend (Spring) đánh số trang từ 0
-const pageSize = 5;// Biến kiểm soát trạng thái
+const pageSize = 4;// Biến kiểm soát trạng thái
 
 
 // 1. CHỐNG HACKER & HIỂN THỊ INFO (Giữ nguyên)
