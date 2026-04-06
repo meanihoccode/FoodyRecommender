@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Nhà hàng - Foody Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === KẾ THỪA CSS TỪ TRANG MANAGE USERS === */
+        :root {
+            --primary-color: #ee4d2d;
+            --sidebar-width: 280px;
+            --bg-light: #f8f9fa;
+            --text-dark: #2b2b2b;
+            --text-muted: #6c757d;
+            --border-color: rgba(0,0,0,0.08);
+            --card-shadow: 0 8px 24px rgba(0,0,0,0.04);
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-width); background-color: white; border-right: 1px solid var(--border-color); position: fixed; height: 100vh; left: 0; top: 0; transition: 0.3s; z-index: 1000; box-shadow: 2px 0 15px rgba(0,0,0,0.02); }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 1.6rem; font-weight: 800; color: var(--primary-color); }
+        .sidebar-menu { padding: 20px 15px; list-style: none; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-menu li a { display: flex; align-items: center; padding: 14px 20px; color: var(--text-muted); text-decoration: none; transition: 0.3s; font-size: 1.05rem; font-weight: 500; border-radius: 12px; }
+        .sidebar-menu li a:hover { background-color: rgba(238, 77, 45, 0.05); color: var(--primary-color); transform: translateX(5px); }
+        .sidebar-menu li.active a { background-color: var(--primary-color); color: white; box-shadow: 0 4px 15px rgba(238, 77, 45, 0.2); }
+        .sidebar-menu li a i { width: 35px; font-size: 1.2rem; }
+        .sidebar-menu li.logout-item a { color: #dc3545; background-color: rgba(220, 53, 69, 0.05); }
+        .sidebar-menu li.logout-item a:hover { background-color: #dc3545; color: white; transform: none; box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2); }
+
+        /* Main Content */
+        .main-content { margin-left: var(--sidebar-width); transition: 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
+        .top-navbar { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; }
+        .user-profile { display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; }
+        .user-profile img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .content-wrapper { padding: 30px; flex: 1; }
+
+        /* Cards & Tables */
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .filter-card { background: white; border-radius: 16px; padding: 20px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); margin-bottom: 25px; }
+        .table-card { background: white; border-radius: 16px; padding: 25px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
+        .table > :not(caption) > * > * { padding: 1rem 0.5rem; border-bottom-color: var(--border-color); vertical-align: middle; }
+        .table-light th { font-weight: 600; text-transform: uppercase; font-size: 0.85rem; border-bottom: 2px solid var(--border-color) !important; color: var(--text-muted); }
+
+        /* CSS Riêng cho Nhà hàng */
+        /* CSS Riêng cho Danh mục (Tags) */
+        .category-wrapper {
+            display: flex;
+            flex-wrap: wrap; /* Tự động rớt dòng nếu tag quá dài */
+            gap: 6px; /* Khoảng cách giữa các tag */
+            max-width: 220px; /* Giới hạn độ rộng để bảng không bị phình to */
+        }
+        .badge-tag {
+            background-color: #fff0ed; /* Nền cam siêu nhạt */
+            color: var(--primary-color);
+            border: 1px solid #fbd2c9; /* Viền mỏng cho sắc nét */
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap; /* Bắt buộc mỗi tag phải nằm trên 1 dòng */
+        }
+        .btn-primary-custom { background-color: var(--primary-color); border-color: var(--primary-color); color: white; }
+        .btn-primary-custom:hover { background-color: #d74325; border-color: #d74325; color: white; }
+        .action-btn { width: 34px; height: 34px; display: inline-flex; justify-content: center; align-items: center; border-radius: 8px; transition: 0.2s; border: 1px solid var(--border-color); background: white;}
+        .action-btn:hover { background: var(--bg-light); transform: translateY(-2px); }
+
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-content { margin-left: 0; }
+            .sidebar.active { transform: translateX(0); box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="sidebar d-flex flex-column" id="sidebar">
+    <div class="sidebar-header">
+        <i class="fas fa-utensils"></i> FOODY ADMIN
+    </div>
+    <ul class="sidebar-menu flex-grow-1 d-flex flex-column pb-4 mb-0">
+        <li><a href="/admin-dashboard"><i class="fas fa-tachometer-alt"></i> Tổng quan</a></li>
+        <li><a href="/manage-users"><i class="fas fa-users"></i> Người dùng</a></li>
+        <li class="active"><a href="/manage-restaurants"><i class="fas fa-store"></i> Nhà hàng</a></li>
+        <li><a href="/manage-reservations"><i class="fas fa-calendar-check"></i> Đặt bàn</a></li>
+        <li><a href="/system-settings"><i class="fas fa-cog"></i> Cài đặt</a></li>
+        <li class="mt-auto logout-item"><a href="#" id="btnLogout" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+    </ul>
+</nav>
+
+<div class="main-content" id="main-content">
+    <header class="top-navbar">
+        <div class="d-flex align-items-center">
+            <button class="btn btn-light d-lg-none me-3" id="sidebarToggle" style="border: 1px solid var(--border-color);"><i class="fas fa-bars text-dark"></i></button>
+            <h4 class="mb-0 fw-bold" style="color: var(--text-dark);">Hệ thống Quản lý</h4>
+        </div>
+        <div class="user-profile dropdown">
+            <span id="adminName" class="d-none d-sm-inline">Admin</span>
+            <img src="https://ui-avatars.com/api/?name=Admin&background=ee4d2d&color=fff" alt="Admin" id="adminAvatar">
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="page-header">
+            <div>
+                <h3 class="fw-bold mb-1">Quản lý Nhà hàng</h3>
+                <p class="text-muted mb-0">Quản lý danh sách, thông tin và đánh giá nhà hàng đối tác.</p>
+            </div>
+            <button class="btn btn-primary-custom shadow-sm" style="border-radius: 10px; font-weight: 600; padding: 10px 20px;" onclick="openRestaurantModal()">
+                <i class="fas fa-plus me-2"></i>Thêm Nhà hàng
+            </button>
+        </div>
+
+        <div class="filter-card">
+            <div class="row g-3">
+                <div class="col-md-5">
+                    <label class="form-label text-muted small fw-bold">Tìm kiếm nhà hàng</label>
+                    <div class="input-group">
+                        <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
+                        <input type="text" class="form-control border-start-0 bg-light" id="searchRestInput" placeholder="Tên nhà hàng, địa chỉ...">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small fw-bold">Danh mục</label>
+                    <input type="text" class="form-control bg-light" id="categoryFilter" placeholder="Nhập danh mục cần lọc (VD: Lẩu, Nướng...)">
+                </div> <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-dark w-100" id="btnFilterRest" style="border-radius: 8px;"><i class="fas fa-filter me-2"></i>Lọc danh sách</button>
+            </div>
+            </div>
+        </div>
+
+        <div class="table-card">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th style="width: 5%">ID</th>
+                        <th style="width: 30%">Thông tin Nhà hàng</th>
+                        <th style="width: 15%">Danh mục</th>
+                        <th style="width: 20%">Khoảng Giá</th>
+                        <th style="width: 15%" class="text-center">Đánh giá</th>
+                        <th style="width: 15%" class="text-center">Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody id="restaurantTableBody">
+
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mt-4">
+                <span class="text-muted small" id="restInfoText">Đang hiển thị 1 - 10 của 498 nhà hàng</span>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0" id="restPagination">
+                        <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
+                        <li class="page-item active"><a class="page-link" style="background-color: var(--primary-color); border-color: var(--primary-color);" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link text-dark" href="#">Sau</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="restaurantModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header border-bottom-0 pb-0">
+                <h5 class="modal-title fw-bold" style="color: var(--primary-color);"><i class="fas fa-store me-2"></i><span id="modalTitle">Thêm Nhà hàng mới</span></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body py-4">
+                <form id="restaurantForm">
+                    <input type="hidden" id="restId">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Tên nhà hàng <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light" id="restName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Danh mục <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light" id="restCategory" placeholder="VD: Món Việt, Hải sản, Đồ Âu..." required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold">Địa chỉ chi tiết <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light" id="restAddress" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Giá trung bình</label>
+                            <input type="text" class="form-control bg-light" id="restPrice" placeholder="VD: 150.000 - 250.000đ/người">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">URL Hình ảnh</label>
+                            <input type="text" class="form-control bg-light" id="restImage" placeholder="https://...">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold">Mô tả</label>
+                            <textarea class="form-control bg-light" id="restDescription" rows="4" placeholder="Nhập mô tả không gian, món ăn..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-top-0 pt-0 justify-content-end">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 8px; font-weight: 600;">Hủy</button>
+                <button type="button" class="btn btn-primary-custom px-4" id="saveRestaurantBtn" style="border-radius: 8px; font-weight: 600;">Lưu thông tin</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Xác nhận đăng xuất</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <p class="mb-0 text-dark">Bạn có chắc chắn muốn rời khỏi trang Quản trị?</p>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger px-4" id="confirmLogoutBtn">Đăng xuất</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/manage-restaurants.js">
+</script>
+</body>
+</html>

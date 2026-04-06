@@ -67,4 +67,7 @@ public class WebController implements WebMvcConfigurer {
 
     @GetMapping("/manage-users")
     public String manageUsers() {return "manage-users";}
+
+    @GetMapping("manage-restaurants")
+    public String manageRestaurants() {return "manage-restaurants";}
 }

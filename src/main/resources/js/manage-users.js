@@ -34,7 +34,7 @@ async function loadUsers(page =0, isRefresh = false) {
     const isActive = document.querySelector("#activeFilter").value;
 
     let url = `/api/user/paged?page=${page}&size=${pageSize}`;
-    if (keyword !== "") url += `&keyword=${encodeURIComponent(keyword)}`
+    if (keyword !== "") url += `&keyword=${encodeURIComponent(keyword)}`;
     if (isVerified !== "ALL") url += `&isVerified=${isVerified === 'TRUE'}`;
     if (isActive !== "ALL") url += `&isActive=${isActive === 'TRUE'}`;
     try {

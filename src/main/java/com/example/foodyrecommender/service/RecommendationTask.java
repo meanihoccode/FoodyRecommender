@@ -10,8 +10,8 @@ public class RecommendationTask {
 
     // Cron expression: Giây Phút Giờ Ngày Tháng Thứ
     // "0 0 2 * * ?" = Đúng 02:00:00 sáng mỗi ngày
-//     @Scheduled(cron = "0 0 2 * * ?")
-     @Scheduled(fixedDelay = 60000) // Đang test 60s/lần
+     @Scheduled(cron = "0 0 2 * * ?")
+//     @Scheduled(fixedDelay = 60000) // Đang test 60s/lần
     public void runPythonRecommendation() {
         System.out.println("--- BẮT ĐẦU CHẠY CẬP NHẬT GỢI Ý AI ---");
 
