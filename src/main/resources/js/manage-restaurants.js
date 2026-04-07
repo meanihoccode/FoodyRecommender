@@ -224,7 +224,7 @@ async function saveRestaurant() {
     saveBtn.disabled = true;
 
     try {
-        const response = await fetch(url, {
+        const response = await apiFetch(url, {
             method: method,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
@@ -248,7 +248,7 @@ async function saveRestaurant() {
 // --- MỞ MODAL ĐỂ CẬP NHẬT ---
 async function updateRestaurant(id) {
     try {
-        const response = await fetch(`/api/restaurants/${id}`);
+        const response = await apiFetch(`/api/restaurants/${id}`);
         if (response.ok) {
             const rest = await response.json();
 
@@ -279,7 +279,7 @@ async function deleteRestaurant(id) {
     }
 
     try {
-        const response = await fetch(`/api/restaurants/${id}`, { method: 'DELETE' });
+        const response = await apiFetch(`/api/restaurants/${id}`, { method: 'DELETE' });
         if (response.ok) {
             alert("Xóa thành công!");
             loadRestaurants(0); // Về trang 1 sau khi xóa
