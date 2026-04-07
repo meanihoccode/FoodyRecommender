@@ -39,7 +39,7 @@ async function LoadFavoritesContainer() {
         const spinner = document.querySelector("#loadingSpinner");
         if (spinner) spinner.style.display = "block";
 
-        const response = await fetch(`/api/user-saved/${userId}`); // Tùy API của bạn, có thể là /users/${userId}/favorites
+        const response = await apiFetch(`/api/user-saved/${userId}`); // Tùy API của bạn, có thể là /users/${userId}/favorites
 
         if (spinner) spinner.style.display = "none";
 
@@ -173,7 +173,7 @@ async function removeFavorite(restaurantId, favId) {
             url = `/api/user-saved/${favId}`;
         }
 
-        const response = await fetch(url, { method: "DELETE" });
+        const response = await apiFetch(url, { method: "DELETE" });
 
         if (response.ok) {
             const domId = favId !== null && favId !== undefined ? favId : restaurantId;

@@ -3,6 +3,21 @@ async function loadBreadcrumbName() {
     userName.innerHTML = localStorage.getItem("userFullName");
 }
 
+function getLoggedInUserId() {
+    const raw = localStorage.getItem('userId');
+    const id = raw ? Number(raw) : NaN;
+    return Number.isFinite(id) ? id : null;
+
+}
+
+function checkAuth () {
+    const userRole = localStorage.getItem('userRole');
+    if (!userRole || userRole !== 'USER') {
+        window.location.href = '/login';
+        return;
+    }
+}
+
 function renderStars(rating) {
     let stars = "";
     for (let i = 1; i <= 5; i++) {
@@ -22,7 +37,7 @@ function renderStars(rating) {
 
 async function loadRestaurantDetail(id) {
     try {
-        const response = await fetch(`api/restaurants/${id}`)
+        const response = await apiFetch(`api/restaurants/${id}`)
         if (response.ok) {
             const restaurant = await response.json();
             const breadcrumbName = document.querySelector("#breadcrumbName");
@@ -84,7 +99,7 @@ const favoriteBtn = document.querySelector("#favoriteBtn");
 favoriteBtn.addEventListener('click', addFavouriteRestaurant);
 async function addFavouriteRestaurant () {
     try {
-        const response = await fetch("/api/user-saved", {
+        const response = await apiFetch("/api/user-saved", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -150,7 +165,7 @@ bookingForm.addEventListener('submit', async function (event) {
 
     // 3. Gửi dữ liệu đi
     try {
-        const response = await fetch("api/reservations", {
+        const response = await apiFetch("api/reservations", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -211,13 +226,13 @@ async function loadRecommendedRestaurant() {
     const currentId = getRestaurantIdFromURL();
 
     try {
-        const responseIds = await fetch(`api/recommendations/${currentId}`);
+        const responseIds = await apiFetch(`api/recommendations/${currentId}`);
         const rawData = await responseIds.json();
 
         if (rawData && rawData.length > 0) {
             const idList = rawData[0].similarRestaurantIds;
             const idsParam = idList.join(",");
-            const responseDetails = await fetch(`api/restaurants/list?ids=${idsParam}`);
+            const responseDetails = await apiFetch(`api/restaurants/list?ids=${idsParam}`);
 
             if (responseDetails.ok) {
                 const recommendations = await responseDetails.json();
@@ -325,4 +340,5 @@ document.addEventListener('DOMContentLoaded', () => {
     loadRecommendedRestaurant();
     loadBreadcrumbName();
     loadRestaurantDetail(getRestaurantIdFromURL());
+    checkAuth();
 });

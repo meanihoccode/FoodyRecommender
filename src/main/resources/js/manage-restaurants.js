@@ -39,7 +39,7 @@ async function loadRestaurants(page = 0, isRefresh = false) {
     if (searchRestInput !== "") url += `&keyword=${encodeURIComponent(searchRestInput)}`;
     if (categoryFilter !== "") url += `&category=${encodeURIComponent(categoryFilter)}`;
     try {
-        const response = await fetch(url);
+        const response = await apiFetch(url);
         if (response.ok) {
             const pageData = await response.json();
             currentPage = pageData.number;

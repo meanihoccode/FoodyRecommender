@@ -11,9 +11,14 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private MaintenanceInterceptor maintenanceInterceptor;
 
+    @Autowired
+    private AuthInterceptor authInterceptor; // 1. Gọi anh bảo vệ mới đến
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // Đăng ký "người gác cổng" cho toàn bộ đường dẫn (/**)
-        registry.addInterceptor(maintenanceInterceptor).addPathPatterns("/**");
+        // Rút 2 anh bảo vệ về chỉ canh gác khu vực Dữ liệu (/api/**)
+        registry.addInterceptor(maintenanceInterceptor).addPathPatterns("/api/**");
+        registry.addInterceptor(authInterceptor).addPathPatterns("/api/**");
     }
+
 }

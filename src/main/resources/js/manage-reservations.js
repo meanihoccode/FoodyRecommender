@@ -60,7 +60,7 @@ async function loadReservations(page = 0, isRefresh = false) {
     if (endDate !== "") url += `&endDate=${endDate}`;
 
     try {
-        const response = await fetch(url);
+        const response = await apiFetch(url);
 
         if (response.ok) {
             const pageData = await response.json();
@@ -223,20 +223,7 @@ function changePage(newPage, event) {
     loadReservations(newPage); // Gọi lại API lấy dữ liệu của trang mới
 }
 
-// Hàm đổi trạng thái (Ví dụ dùng chung cho cả Confirm và Cancel)
-async function updateStatus(id, newStatus) {
-    if(!confirm(`Xác nhận chuyển trạng thái thành: ${newStatus}?`)) return;
 
-    try {
-        // GỌI API PUT Ở ĐÂY
-        const response = await fetch("api/");
-
-        // Gọi xong thì load lại đúng trang hiện tại để thấy cập nhật
-         loadReservations(currentPage);
-    } catch (e) {
-        alert("Lỗi kết nối");
-    }
-}
 
 
 async function confirmReservation(id) {
@@ -244,7 +231,7 @@ async function confirmReservation(id) {
 
     try {
         // GỌI API PUT Ở ĐÂY
-        const response = await fetch(`api/reservations/confirmation/${id}`,{
+        const response = await apiFetch(`api/reservations/confirmation/${id}`,{
             method: "PUT",
         });
         if (response.ok) {
@@ -266,7 +253,7 @@ async function cancelReservation(id) {
 
     try {
         // GỌI API PUT Ở ĐÂY
-        const response = await fetch(`api/reservations/cancellation/${id}`,{
+        const response = await apiFetch(`api/reservations/cancellation/${id}`,{
             method: "PUT",
         });
         if (response.ok) {
@@ -288,7 +275,7 @@ async function completeReservation(id) {
 
     try {
         // GỌI API PUT Ở ĐÂY (Sửa lại link API cho khớp với Backend của bạn nhé)
-        const response = await fetch(`/api/reservations/completion/${id}`, {
+        const response = await apiFetch(`/api/reservations/completion/${id}`, {
             method: "PUT",
         });
 
@@ -308,7 +295,7 @@ async function completeReservation(id) {
 async function viewReservation(id) {
     try {
         // Gọi API lấy chi tiết 1 đơn
-        const response = await fetch(`/api/reservations/${id}`);
+        const response = await apiFetch(`/api/reservations/${id}`);
         if (response.ok) {
             const res = await response.json();
 
@@ -416,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
             this.disabled = true;
 
             try {
-                const response = await fetch('/api/reservations', {
+                const response = await apiFetch('/api/reservations', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newRes)
@@ -463,7 +450,7 @@ async function loadRestaurantDropdown() {
 
     try {
         // 2. Gọi API lấy dữ liệu
-        const response = await fetch('/api/restaurants');
+        const response = await apiFetch('/api/restaurants');
         if (response.ok) {
             const restaurants = await response.json();
 

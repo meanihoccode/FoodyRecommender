@@ -78,7 +78,8 @@ async function fetchRestaurants(keyword, category, page, isAppend) {
         }
 
         // Bạn tìm dòng định nghĩa url và nối thêm &sortBy=${currentSort} vào đuôi:
-        const url = `/api/restaurants/search?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(category)}&page=${page}&size=12&sortBy=${currentSort}`;        const response = await fetch(url);
+        const url = `/api/restaurants/search?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(category)}&page=${page}&size=12&sortBy=${currentSort}`;
+        const response = await apiFetch(url);
 
         if (response.ok) {
             const pageData = await response.json();

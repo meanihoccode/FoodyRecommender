@@ -38,7 +38,7 @@ async function loadUsers(page =0, isRefresh = false) {
     if (isVerified !== "ALL") url += `&isVerified=${isVerified === 'TRUE'}`;
     if (isActive !== "ALL") url += `&isActive=${isActive === 'TRUE'}`;
     try {
-        const response = await fetch(url);
+        const response = await apiFetch(url);
         if (response.ok) {
             const pageData = await response.json();
             currentPage = pageData.number;
@@ -143,7 +143,7 @@ async function toggleUserStatus(id,unlock) {
     const actionText = unlock ? "MỞ KHÓA" : "KHÓA";
     if(!confirm(`Bạn có chắc chắn muốn ${actionText} tài khoản này không?`)) return;
     try {
-        const response = await fetch(`/api/user/lockacc/${id}`, {
+        const response = await apiFetch(`/api/user/lockacc/${id}`, {
             method: "PUT"
         });
         if (response.ok) {
@@ -159,7 +159,7 @@ async function toggleUserStatus(id,unlock) {
 
 async function viewUser(id) {
     try {
-        const response = await fetch(`/api/user/${id}`);
+        const response = await apiFetch(`/api/user/${id}`);
         if (response.ok) {
             const user = await response.json();
 

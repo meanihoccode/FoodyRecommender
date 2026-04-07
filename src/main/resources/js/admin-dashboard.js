@@ -37,7 +37,7 @@ document.getElementById('sidebarToggle').addEventListener('click', function() {
 async function loadUsers() {
     const userTableBody = document.querySelector("#userTableBody");
     try {
-        const response = await fetch("/api/user");
+        const response = await apiFetch("/api/user");
         if (response.ok) {
             userTableBody.innerHTML = ''; // Xóa chữ "Đang tải..."
             const userData = await response.json();
@@ -95,7 +95,7 @@ async function loadUsers() {
 async function loadRestaurantCount() {
     const totalRestaurants = document.querySelector("#totalRestaurants");
     try {
-        const response = await fetch('/api/restaurants/count'); // Thêm dấu /
+        const response = await apiFetch('/api/restaurants/count'); // Thêm dấu /
         if (response.ok) {
             totalRestaurants.innerHTML = await response.json();
         } else {
@@ -109,7 +109,7 @@ async function loadRestaurantCount() {
 async function loadReservationCount() {
     const totalReservations = document.querySelector("#totalReservations");
     try {
-        const response = await fetch('/api/reservations/count'); // Thêm dấu /
+        const response = await apiFetch('/api/reservations/count'); // Thêm dấu /
         if (response.ok) {
             totalReservations.innerHTML = await response.json();
         } else {
@@ -128,7 +128,7 @@ async function lockAccount(id) {
 
     try {
         // Đã thêm dấu / ở đầu link
-        const response = await fetch(`/api/user/lockacc/${id}`, {
+        const response = await apiFetch(`/api/user/lockacc/${id}`, {
             method: "PUT" // Hoặc POST tùy theo Backend của bạn thiết kế
         });
 

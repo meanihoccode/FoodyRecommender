@@ -38,8 +38,10 @@ public class SystemController {
 
     // API 1: Lấy trạng thái hiện tại (để Frontend hiển thị nút gạt đúng vị trí)
     @GetMapping("/maintenance")
-    public ResponseEntity<Boolean> getMaintenanceStatus() {
-        return ResponseEntity.ok(isMaintenanceMode);
+    public ResponseEntity<Map<String, Boolean>> getMaintenanceStatus() {
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("status", isMaintenanceMode);
+        return ResponseEntity.ok(response);
     }
 
     // API 2: Bật/Tắt chế độ bảo trì

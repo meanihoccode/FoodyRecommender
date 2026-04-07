@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 // Gọi API backend Spring Boot (Bạn cần viết 1 API trong Java gọi hàm runPythonRecommendation)
-                const response = await fetch('/api/system/trigger-ai', { method: 'POST' });
+                const response = await apiFetch('/api/system/trigger-ai', { method: 'POST' });
 
                 if (response.ok) {
                     alert("Chạy thuật toán AI thành công! Danh sách gợi ý đã được cập nhật mới nhất.");
@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Thay thế bằng API thật của bạn, nhớ truyền userId lấy từ localStorage nếu cần
                 const adminId = localStorage.getItem('userId');
-                const response = await fetch(`/api/user/${adminId}/change-password`, {
+                const response = await apiFetch(`/api/user/${adminId}/change-password`, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ oldPassword: currentPw, newPassword: newPw })
@@ -117,49 +117,48 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-});
-
 // ==========================================
-// 5. XỬ LÝ CÔNG TẮC BẢO TRÌ (MAINTENANCE MODE)
-// ==========================================
-const maintenanceToggle = document.getElementById('maintenanceMode');
+    // 5. XỬ LÝ CÔNG TẮC BẢO TRÌ (MAINTENANCE MODE)
+    // ==========================================
+    const maintenanceToggle = document.getElementById('maintenanceMode');
 
-if (maintenanceToggle) {
-    // 5.1. Khi vừa mở trang, gọi API xem web có đang bảo trì không để gạt công tắc cho chuẩn
-    fetch('/api/system/maintenance')
-        .then(res => res.json())
-        .then(isMaintenance => {
-            maintenanceToggle.checked = isMaintenance;
-        })
-        .catch(err => console.error("Lỗi lấy trạng thái bảo trì", err));
+    if (maintenanceToggle) {
+        // 5.1. Khi vừa mở trang, lấy trạng thái (Đã sửa lại để đọc đúng JSON)
+        apiFetch('/api/system/maintenance')
+            .then(res => res.json())
+            .then(data => {
+                // Đọc thuộc tính 'status' từ cái Map ở Backend trả về
+                maintenanceToggle.checked = data.status;
+            })
+            .catch(err => console.error("Lỗi lấy trạng thái bảo trì:", err));
 
-    // 5.2. Khi Admin bấm vào công tắc
-    maintenanceToggle.addEventListener('change', async function() {
-        const isChecked = this.checked;
-        const confirmMsg = isChecked
-            ? "Bạn sắp BẬT chế độ bảo trì. Toàn bộ khách hàng sẽ không thể truy cập web. Tiếp tục?"
-            : "Bạn sắp TẮT chế độ bảo trì. Khách hàng sẽ truy cập bình thường. Tiếp tục?";
+        // 5.2. Khi Admin bấm vào công tắc (Giữ nguyên như cũ)
+        maintenanceToggle.addEventListener('change', async function() {
+            const isChecked = this.checked;
+            const confirmMsg = isChecked
+                ? "Bạn sắp BẬT chế độ bảo trì. Toàn bộ khách hàng sẽ không thể truy cập web. Tiếp tục?"
+                : "Bạn sắp TẮT chế độ bảo trì. Khách hàng sẽ truy cập bình thường. Tiếp tục?";
 
-        if (!confirm(confirmMsg)) {
-            this.checked = !isChecked; // Trả lại vị trí cũ nếu bấm Hủy
-            return;
-        }
+            if (!confirm(confirmMsg)) {
+                this.checked = !isChecked;
+                return;
+            }
 
-        try {
-            // Gửi trạng thái mới lên Backend
-            const response = await fetch(`/api/system/maintenance?status=${isChecked}`, {
-                method: 'POST'
-            });
+            try {
+                const response = await apiFetch(`/api/system/maintenance?status=${isChecked}`, {
+                    method: 'POST'
+                });
 
-            if (response.ok) {
-                alert(isChecked ? "Đã khóa hệ thống!" : "Hệ thống đã hoạt động bình thường!");
-            } else {
-                alert("Có lỗi xảy ra!");
+                if (response.ok) {
+                    alert(isChecked ? "Đã khóa hệ thống!" : "Hệ thống đã hoạt động bình thường!");
+                } else {
+                    alert("Có lỗi xảy ra!");
+                    this.checked = !isChecked;
+                }
+            } catch (error) {
+                alert("Mất kết nối mạng!");
                 this.checked = !isChecked;
             }
-        } catch (error) {
-            alert("Mất kết nối mạng!");
-            this.checked = !isChecked;
-        }
-    });
-}
+        });
+    }
+});
