@@ -72,19 +72,20 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public User changePassword(long id, ChangePasswordRequest request) {
-        User existUser = userRepository.findUserById(id);
-        if (existUser == null) {
-            throw new RuntimeException("User not found with id: " + id);
-        } else {
-            if (passwordEncoder.matches(request.getOldPassword(), existUser.getPassword())) {
-                existUser.setPassword(passwordEncoder.encode(request.getNewPassword()));
-                userRepository.save(existUser);
-                return existUser;
-            } else  {
-                throw new RuntimeException("Incorrect old password");
-            }
-        }
+
+    public void changePassword(int userId, String oldPassword, String newPassword) {
+        // 1. Tìm user trong Database
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy tài khoản người dùng!"));
+
+        // 2. Kiểm tra mật khẩu cũ có khớp không?
+         if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+             throw new RuntimeException("Mật khẩu hiện tại không chính xác!");
+         }
+        // 3. Cập nhật mật khẩu mới và lưu lại
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
 
     public Page<User> getUsersWithPagination(int page, int size, String keyword, String isVerified, String isActive) {

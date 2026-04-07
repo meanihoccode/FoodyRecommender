@@ -6,6 +6,7 @@ import com.example.foodyrecommender.dto.LoginRequest;
 import com.example.foodyrecommender.entity.Reservation;
 import com.example.foodyrecommender.entity.User;
 import com.example.foodyrecommender.service.UserService;
+import com.example.foodyrecommender.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
@@ -26,6 +29,10 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         return ResponseEntity.ok(userService.findAll());
@@ -50,40 +57,44 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        // Tìm user theo email
         User user = userService.findByEmail(loginRequest.getEmail());
-
-        // Thông báo lỗi chung để bảo mật
         String errorMessage = "Email hoặc mật khẩu không chính xác";
 
-        // Kiểm tra user có tồn tại không và password có khớp không
         if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
             return ResponseEntity.status(401).body(new ErrorResponse(errorMessage));
         }
 
-        // ==========================================
-        // LẮP 2 TRẠM KIỂM SOÁT BẢO MẬT TẠI ĐÂY
-        // ==========================================
-
-        // Trạm 1: Bắt buộc phải xác thực OTP
+        // Trạm 1: Xác thực OTP
         if (!user.getIsVerified()) {
-            // Ném về mã 403 (Forbidden) và gắn cờ "NOT_VERIFIED" cho Frontend dễ nhận biết
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body(Map.of(
-                            "message", "Tài khoản chưa được xác thực! Vui lòng kiểm tra email để lấy mã OTP.",
+                            "message", "Tài khoản chưa được xác thực!",
                             "errorCode", "NOT_VERIFIED",
                             "email", user.getEmail()
                     ));
         }
 
-        // Trạm 2: Quyền lực của Admin (Chặn tài khoản bị khóa)
+        // Trạm 2: Kiểm tra trạng thái hoạt động
         if (!user.getIsActive()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new ErrorResponse("Tài khoản của bạn đã bị khóa. Vui lòng liên hệ Admin!"));
+                    .body(new ErrorResponse("Tài khoản đã bị khóa!"));
         }
 
-        // Vượt qua hết thì cho phép Login thành công
-        return ResponseEntity.ok(user);
+        // ==========================================
+        // CẤP "THẺ TÊN" JWT TẠI ĐÂY
+        // ==========================================
+
+        // 2. Tạo Token chứa Email và Quyền (Role)
+        String token = jwtUtil.generateToken(user.getEmail(), user.getRole());
+
+        // 3. Đóng gói phản hồi (Chứa Token và thông tin cơ bản)
+        Map<String, Object> response = new HashMap<>();
+        response.put("token", token);
+        response.put("userId", user.getId());
+        response.put("role", user.getRole());
+        response.put("fullName", user.getFullName());
+
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping
@@ -115,13 +126,24 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    @PutMapping("change-password/{id}")
-    public ResponseEntity<User> changePassword(@PathVariable int id, @RequestBody ChangePasswordRequest changePasswordRequest) {
-        User existUser = userService.changePassword(id,changePasswordRequest);
-        if (existUser == null) {
-            return ResponseEntity.notFound().build();
-        } else  {
-            return ResponseEntity.ok(existUser);
+// ... (Các API cũ giữ nguyên) ...
+
+    @PutMapping("/{id}/change-password")
+    public ResponseEntity<?> changePassword(@PathVariable int id, @RequestBody ChangePasswordRequest request) {
+        try {
+            // Gọi hàm xử lý trong Service
+            userService.changePassword(id, request.getOldPassword(), request.getNewPassword());
+
+            // Trả về JSON thành công
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Đổi mật khẩu thành công");
+            return ResponseEntity.ok(response);
+
+        } catch (RuntimeException e) {
+            // Trả về lỗi 400 (Bad Request) nếu sai mật khẩu cũ
+            Map<String, String> error = new HashMap<>();
+            error.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
         }
     }
 

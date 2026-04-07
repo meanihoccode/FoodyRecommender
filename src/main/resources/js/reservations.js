@@ -49,7 +49,7 @@ async function loadReservations () {
     }
 
     try {
-        const response = await fetch(`/api/reservations/users/${userId}`);
+        const response = await apiFetch(`/api/reservations/users/${userId}`);
         if (response.ok) {
             const data = await response.json();
 
@@ -221,7 +221,7 @@ async function openCancelModal(id, restaurantName) {
 document.querySelector("#confirmCancelBtn").addEventListener('click', async function() {
     if (!currentCancelId) return;
     try {
-        const response = await fetch(`/api/reservations/cancellation/${currentCancelId}`, {
+        const response = await apiFetch(`/api/reservations/cancellation/${currentCancelId}`, {
             method: "PUT"
         });
         if (response.ok) {
@@ -324,7 +324,7 @@ document.getElementById('submitRatingBtn').addEventListener('click', async funct
     this.disabled = true;
 
     try {
-        const response = await fetch('/api/ratings', {
+        const response = await apiFetch('/api/ratings', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)

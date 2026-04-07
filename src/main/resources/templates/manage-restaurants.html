@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Người dùng - Foody Admin</title>
+    <title>Quản lý Nhà hàng - Foody Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* === KẾ THỪA CSS TỪ CÁC TRANG TRƯỚC === */
+        /* === KẾ THỪA CSS TỪ TRANG MANAGE USERS === */
         :root {
             --primary-color: #ee4d2d;
             --sidebar-width: 280px;
@@ -43,9 +43,31 @@
         .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .filter-card { background: white; border-radius: 16px; padding: 20px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); margin-bottom: 25px; }
         .table-card { background: white; border-radius: 16px; padding: 25px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); }
-        .table > :not(caption) > * > * { padding: 1rem 0.5rem; border-bottom-color: var(--border-color); }
+        .table > :not(caption) > * > * { padding: 1rem 0.5rem; border-bottom-color: var(--border-color); vertical-align: middle; }
         .table-light th { font-weight: 600; text-transform: uppercase; font-size: 0.85rem; border-bottom: 2px solid var(--border-color) !important; color: var(--text-muted); }
-        .badge { padding: 0.5em 0.8em; border-radius: 8px; font-weight: 600; }
+
+        /* CSS Riêng cho Nhà hàng */
+        /* CSS Riêng cho Danh mục (Tags) */
+        .category-wrapper {
+            display: flex;
+            flex-wrap: wrap; /* Tự động rớt dòng nếu tag quá dài */
+            gap: 6px; /* Khoảng cách giữa các tag */
+            max-width: 220px; /* Giới hạn độ rộng để bảng không bị phình to */
+        }
+        .badge-tag {
+            background-color: #fff0ed; /* Nền cam siêu nhạt */
+            color: var(--primary-color);
+            border: 1px solid #fbd2c9; /* Viền mỏng cho sắc nét */
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            white-space: nowrap; /* Bắt buộc mỗi tag phải nằm trên 1 dòng */
+        }
+        .btn-primary-custom { background-color: var(--primary-color); border-color: var(--primary-color); color: white; }
+        .btn-primary-custom:hover { background-color: #d74325; border-color: #d74325; color: white; }
+        .action-btn { width: 34px; height: 34px; display: inline-flex; justify-content: center; align-items: center; border-radius: 8px; transition: 0.2s; border: 1px solid var(--border-color); background: white;}
+        .action-btn:hover { background: var(--bg-light); transform: translateY(-2px); }
 
         @media (max-width: 992px) {
             .sidebar { transform: translateX(-100%); }
@@ -62,11 +84,11 @@
     </div>
     <ul class="sidebar-menu flex-grow-1 d-flex flex-column pb-4 mb-0">
         <li><a href="/admin-dashboard"><i class="fas fa-tachometer-alt"></i> Tổng quan</a></li>
-        <li class="active"><a href="/manage-users"><i class="fas fa-users"></i> Người dùng</a></li>
-        <li><a href="/manage-restaurants"><i class="fas fa-store"></i> Nhà hàng</a></li>
+        <li><a href="/manage-users"><i class="fas fa-users"></i> Người dùng</a></li>
+        <li class="active"><a href="/manage-restaurants"><i class="fas fa-store"></i> Nhà hàng</a></li>
         <li><a href="/manage-reservations"><i class="fas fa-calendar-check"></i> Đặt bàn</a></li>
         <li><a href="/system-settings"><i class="fas fa-cog"></i> Cài đặt</a></li>
-        <li class="mt-auto logout-item"><a href="#" id="btnLogout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+        <li class="mt-auto logout-item"><a href="#" id="btnLogout" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
     </ul>
 </nav>
 
@@ -85,42 +107,29 @@
     <div class="content-wrapper">
         <div class="page-header">
             <div>
-                <h3 class="fw-bold mb-1">Quản lý Người dùng</h3>
-                <p class="text-muted mb-0">Quản lý tài khoản, phân quyền và trạng thái hoạt động.</p>
+                <h3 class="fw-bold mb-1">Quản lý Nhà hàng</h3>
+                <p class="text-muted mb-0">Quản lý danh sách, thông tin và đánh giá nhà hàng đối tác.</p>
             </div>
-            <button class="btn btn-outline-secondary" style="border-radius: 10px; font-weight: 600;">
-                <i class="fas fa-file-export me-2"></i>Xuất Excel
+            <button class="btn btn-primary-custom shadow-sm" style="border-radius: 10px; font-weight: 600; padding: 10px 20px;" onclick="openRestaurantModal()">
+                <i class="fas fa-plus me-2"></i>Thêm Nhà hàng
             </button>
         </div>
 
         <div class="filter-card">
             <div class="row g-3">
-                <div class="col-md-4">
-                    <label class="form-label text-muted small fw-bold">Tìm kiếm tài khoản</label>
+                <div class="col-md-5">
+                    <label class="form-label text-muted small fw-bold">Tìm kiếm nhà hàng</label>
                     <div class="input-group">
                         <span class="input-group-text bg-light border-end-0"><i class="fas fa-search text-muted"></i></span>
-                        <input type="text" class="form-control border-start-0 bg-light" id="searchUserInput" placeholder="Tên, Email, SĐT...">
+                        <input type="text" class="form-control border-start-0 bg-light" id="searchRestInput" placeholder="Tên nhà hàng, địa chỉ...">
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small fw-bold">Trạng thái Xác thực</label>
-                    <select class="form-select bg-light" id="verifiedFilter">
-                        <option value="ALL">Tất cả</option>
-                        <option value="TRUE">Đã xác thực</option>
-                        <option value="FALSE">Chưa xác thực</option>
-                    </select>
-                </div>
-                <div class="col-md-3">
-                    <label class="form-label text-muted small fw-bold">Trạng thái Hoạt động</label>
-                    <select class="form-select bg-light" id="activeFilter">
-                        <option value="ALL">Tất cả</option>
-                        <option value="TRUE">Đang hoạt động</option>
-                        <option value="FALSE">Bị khóa</option>
-                    </select>
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button class="btn btn-dark w-100" id="btnFilterUsers" style="border-radius: 8px;"><i class="fas fa-filter me-2"></i>Lọc</button>
-                </div>
+                <div class="col-md-4">
+                    <label class="form-label text-muted small fw-bold">Danh mục</label>
+                    <input type="text" class="form-control bg-light" id="categoryFilter" placeholder="Nhập danh mục cần lọc (VD: Lẩu, Nướng...)">
+                </div> <div class="col-md-3 d-flex align-items-end">
+                <button class="btn btn-dark w-100" id="btnFilterRest" style="border-radius: 8px;"><i class="fas fa-filter me-2"></i>Lọc danh sách</button>
+            </div>
             </div>
         </div>
 
@@ -130,23 +139,27 @@
                     <thead class="table-light">
                     <tr>
                         <th style="width: 5%">ID</th>
-                        <th style="width: 20%">Họ và Tên</th>
-                        <th style="width: 20%">Thông tin liên hệ</th>
-                        <th style="width: 15%">Vai trò</th>
-                        <th style="width: 15%">Xác thực OTP</th>
-                        <th style="width: 15%">Trạng thái</th>
-                        <th style="width: 10%" class="text-center">Thao tác</th>
+                        <th style="width: 30%">Thông tin Nhà hàng</th>
+                        <th style="width: 15%">Danh mục</th>
+                        <th style="width: 20%">Khoảng Giá</th>
+                        <th style="width: 15%" class="text-center">Đánh giá</th>
+                        <th style="width: 15%" class="text-center">Thao tác</th>
                     </tr>
                     </thead>
-                    <tbody id="userTableBody">
+                    <tbody id="restaurantTableBody">
+
                     </tbody>
                 </table>
             </div>
 
             <div class="d-flex justify-content-between align-items-center mt-4">
-                <span class="text-muted small" id="userInfoText">Đang hiển thị...</span>
+                <span class="text-muted small" id="restInfoText">Đang hiển thị 1 - 10 của 498 nhà hàng</span>
                 <nav>
-                    <ul class="pagination pagination-sm mb-0" id="userPagination">
+                    <ul class="pagination pagination-sm mb-0" id="restPagination">
+                        <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
+                        <li class="page-item active"><a class="page-link" style="background-color: var(--primary-color); border-color: var(--primary-color);" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link text-dark" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link text-dark" href="#">Sau</a></li>
                     </ul>
                 </nav>
             </div>
@@ -154,39 +167,47 @@
     </div>
 </div>
 
-<div class="modal fade" id="viewUserModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+<div class="modal fade" id="restaurantModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" style="border-radius: 16px; border: none;">
             <div class="modal-header border-bottom-0 pb-0">
-                <h5 class="modal-title fw-bold" style="color: var(--primary-color);"><i class="fas fa-user-circle me-2"></i>Chi tiết Người dùng</h5>
+                <h5 class="modal-title fw-bold" style="color: var(--primary-color);"><i class="fas fa-store me-2"></i><span id="modalTitle">Thêm Nhà hàng mới</span></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div class="modal-body py-4 text-center">
-                <img src="" id="detailUserAvatar" alt="Avatar" style="width: 80px; height: 80px; border-radius: 50%; border: 3px solid #eee; margin-bottom: 15px;">
-                <h4 class="fw-bold mb-1" id="detailUserFullName">Đang tải...</h4>
-                <p class="text-muted mb-3" id="detailUserEmail">Đang tải...</p>
-
-                <div class="row text-start mt-4 border-top pt-3">
-                    <div class="col-6 mb-2">
-                        <small class="text-muted d-block">Số điện thoại</small>
-                        <strong id="detailUserPhone" class="text-dark">Đang tải...</strong>
+            <div class="modal-body py-4">
+                <form id="restaurantForm">
+                    <input type="hidden" id="restId">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Tên nhà hàng <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light" id="restName" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Danh mục <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light" id="restCategory" placeholder="VD: Món Việt, Hải sản, Đồ Âu..." required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold">Địa chỉ chi tiết <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control bg-light" id="restAddress" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">Giá trung bình</label>
+                            <input type="text" class="form-control bg-light" id="restPrice" placeholder="VD: 150.000 - 250.000đ/người">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label text-muted small fw-bold">URL Hình ảnh</label>
+                            <input type="text" class="form-control bg-light" id="restImage" placeholder="https://...">
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label text-muted small fw-bold">Mô tả</label>
+                            <textarea class="form-control bg-light" id="restDescription" rows="4" placeholder="Nhập mô tả không gian, món ăn..."></textarea>
+                        </div>
                     </div>
-                    <div class="col-6 mb-2">
-                        <small class="text-muted d-block">Vai trò</small>
-                        <strong id="detailUserRole" class="text-dark">Đang tải...</strong>
-                    </div>
-                    <div class="col-6 mb-2">
-                        <small class="text-muted d-block">Xác thực</small>
-                        <span id="detailUserVerified" class="badge">Đang tải...</span>
-                    </div>
-                    <div class="col-6 mb-2">
-                        <small class="text-muted d-block">Trạng thái</small>
-                        <span id="detailUserActive" class="badge">Đang tải...</span>
-                    </div>
-                </div>
+                </form>
             </div>
-            <div class="modal-footer border-top-0 pt-0 justify-content-center">
-                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 8px;">Đóng</button>
+            <div class="modal-footer border-top-0 pt-0 justify-content-end">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 8px; font-weight: 600;">Hủy</button>
+                <button type="button" class="btn btn-primary-custom px-4" id="saveRestaurantBtn" style="border-radius: 8px; font-weight: 600;">Lưu thông tin</button>
             </div>
         </div>
     </div>
@@ -211,7 +232,9 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/manage-users.js"></script>
+<script src="/js/manage-restaurants.js">
+
+</script>
 <script src="/js/api-client.js"></script>
 </body>
 </html>

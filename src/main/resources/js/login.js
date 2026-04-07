@@ -33,30 +33,23 @@ async function handleLogin(e) {
         });
 
         if (response.ok) {
-            const user = await response.json();
+            const data = await response.json();
 
-            if (!user.id) {
-                showError('Lỗi: Dữ liệu tài khoản không hợp lệ.');
-                return;
-            }
+            // Cất toàn bộ thông tin Backend trả về vào "Ví"
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userRole', data.role);
+            localStorage.setItem('userId', data.userId);
+            localStorage.setItem('userFullName', data.fullName);
 
-            // 4. Lưu vào LocalStorage
-            localStorage.setItem('userId', String(user.id));
-            localStorage.setItem('userEmail', user.email || '');
-            localStorage.setItem('userFullName', user.fullName || '');
-
-            // Lưu Role (Quyền) để phân quyền Admin/User
-            const userRole = user.role || 'USER';
-            localStorage.setItem('userRole', userRole);
-
-            // 5. CHUYỂN HƯỚNG THÔNG MINH
-            if (userRole === 'ADMIN') {
+            // Chuyển hướng tùy theo quyền
+            if (data.role === 'ADMIN') {
                 window.location.href = '/admin-dashboard';
             } else {
-                window.location.href = '/home';
+                window.location.href = '/home'; // Trang cho khách
             }
+        }
 
-        } else {
+         else {
             let errorMessage = 'Email hoặc mật khẩu không chính xác.';
             try {
 

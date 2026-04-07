@@ -54,7 +54,7 @@ async function fetchRestaurants(keyword, category, page, isAppend) {
         // URL gọi đến API Search có phân trang của Spring Boot
         const url = `/api/restaurants/search?keyword=${encodeURIComponent(keyword)}&category=${encodeURIComponent(category)}&page=${page}&size=12`;
 
-        const response = await fetch(url);
+        const response =await apiFetch(url);
         if (response.ok) {
             const pageData = await response.json(); // Nhận object Page từ Spring
             const restaurants = pageData.content;   // Danh sách nhà hàng nằm trong 'content'

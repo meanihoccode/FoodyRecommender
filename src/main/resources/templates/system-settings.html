@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cài đặt Hệ thống - Foody Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* === KẾ THỪA CSS TỪ TRANG ADMIN === */
+        :root {
+            --primary-color: #ee4d2d;
+            --sidebar-width: 280px;
+            --bg-light: #f8f9fa;
+            --text-dark: #2b2b2b;
+            --text-muted: #6c757d;
+            --border-color: rgba(0,0,0,0.08);
+            --card-shadow: 0 8px 24px rgba(0,0,0,0.04);
+        }
+
+        body { font-family: 'Segoe UI', sans-serif; background-color: var(--bg-light); color: var(--text-dark); overflow-x: hidden; }
+
+        /* Sidebar */
+        .sidebar { width: var(--sidebar-width); background-color: white; border-right: 1px solid var(--border-color); position: fixed; height: 100vh; left: 0; top: 0; transition: 0.3s; z-index: 1000; box-shadow: 2px 0 15px rgba(0,0,0,0.02); }
+        .sidebar-header { padding: 25px 20px; text-align: center; border-bottom: 1px solid var(--border-color); font-size: 1.6rem; font-weight: 800; color: var(--primary-color); }
+        .sidebar-menu { padding: 20px 15px; list-style: none; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar-menu li a { display: flex; align-items: center; padding: 14px 20px; color: var(--text-muted); text-decoration: none; transition: 0.3s; font-size: 1.05rem; font-weight: 500; border-radius: 12px; }
+        .sidebar-menu li a:hover { background-color: rgba(238, 77, 45, 0.05); color: var(--primary-color); transform: translateX(5px); }
+        .sidebar-menu li.active a { background-color: var(--primary-color); color: white; box-shadow: 0 4px 15px rgba(238, 77, 45, 0.2); }
+        .sidebar-menu li a i { width: 35px; font-size: 1.2rem; }
+        .sidebar-menu li.logout-item a { color: #dc3545; background-color: rgba(220, 53, 69, 0.05); }
+        .sidebar-menu li.logout-item a:hover { background-color: #dc3545; color: white; transform: none; box-shadow: 0 4px 15px rgba(220, 53, 69, 0.2); }
+
+        /* Main Content */
+        .main-content { margin-left: var(--sidebar-width); transition: 0.3s; min-height: 100vh; display: flex; flex-direction: column; }
+        .top-navbar { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 999; }
+        .user-profile { display: flex; align-items: center; gap: 12px; font-weight: 600; cursor: pointer; }
+        .user-profile img { width: 42px; height: 42px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .content-wrapper { padding: 30px; flex: 1; }
+
+        /* Settings Specific */
+        .page-header { margin-bottom: 25px; }
+        .setting-card { background: white; border-radius: 16px; padding: 25px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); height: 100%; }
+        .setting-title { font-weight: 700; color: var(--text-dark); margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; }
+
+        .btn-primary-custom { background-color: var(--primary-color); border-color: var(--primary-color); color: white; border-radius: 8px; font-weight: 600; }
+        .btn-primary-custom:hover { background-color: #d74325; border-color: #d74325; color: white; }
+
+        /* Toggle Switch Custom */
+        .form-check-input:checked { background-color: var(--primary-color); border-color: var(--primary-color); }
+        .ai-status-box { background-color: rgba(238, 77, 45, 0.05); border: 1px dashed var(--primary-color); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
+
+        @media (max-width: 992px) {
+            .sidebar { transform: translateX(-100%); }
+            .main-content { margin-left: 0; }
+            .sidebar.active { transform: translateX(0); box-shadow: 5px 0 25px rgba(0,0,0,0.1); }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="sidebar d-flex flex-column" id="sidebar">
+    <div class="sidebar-header">
+        <i class="fas fa-utensils"></i> FOODY ADMIN
+    </div>
+    <ul class="sidebar-menu flex-grow-1 d-flex flex-column pb-4 mb-0">
+        <li><a href="/admin-dashboard"><i class="fas fa-tachometer-alt"></i> Tổng quan</a></li>
+        <li><a href="/manage-users"><i class="fas fa-users"></i> Người dùng</a></li>
+        <li><a href="/manage-restaurants"><i class="fas fa-store"></i> Nhà hàng</a></li>
+        <li><a href="/manage-reservations"><i class="fas fa-calendar-check"></i> Đặt bàn</a></li>
+        <li class="active"><a href="/system-settings"><i class="fas fa-cog"></i> Cài đặt</a></li>
+        <li class="mt-auto logout-item"><a href="#" id="btnLogout" data-bs-toggle="modal" data-bs-target="#logoutModal"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a></li>
+    </ul>
+</nav>
+
+<div class="main-content" id="main-content">
+    <header class="top-navbar">
+        <div class="d-flex align-items-center">
+            <button class="btn btn-light d-lg-none me-3" id="sidebarToggle" style="border: 1px solid var(--border-color);"><i class="fas fa-bars text-dark"></i></button>
+            <h4 class="mb-0 fw-bold" style="color: var(--text-dark);">Hệ thống Quản lý</h4>
+        </div>
+        <div class="user-profile dropdown">
+            <span id="adminName" class="d-none d-sm-inline">Admin</span>
+            <img src="https://ui-avatars.com/api/?name=Admin&background=ee4d2d&color=fff" alt="Admin" id="adminAvatar">
+        </div>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="page-header">
+            <h3 class="fw-bold mb-1">Cài đặt Hệ thống</h3>
+            <p class="text-muted mb-0">Quản lý cấu hình AI, bảo mật và các thông số kỹ thuật.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="setting-card">
+                    <h5 class="setting-title"><i class="fas fa-robot text-primary me-2"></i>Cấu hình AI Recommender</h5>
+
+                    <div class="ai-status-box">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold text-dark">Trạng thái Batch Processing:</span>
+                            <span class="badge bg-success">Đang hoạt động</span>
+                        </div>
+                        <div class="text-muted small mb-1"><i class="fas fa-clock me-1"></i>Lịch trình: <b>02:00 AM</b> mỗi ngày</div>
+                        <div class="text-muted small"><i class="fas fa-history me-1"></i>Cập nhật lần cuối: <b id="lastAiRunTime">Đang tải...</b></div>
+                    </div>
+
+                    <p class="text-muted small mb-4">Hệ thống AI gợi ý nhà hàng dựa trên thuật toán Hybrid (Cosine Similarity + User Ratings + Popularity). Bạn có thể kích hoạt chạy lại thủ công nếu vừa cập nhật lượng lớn dữ liệu.</p>
+
+                    <button class="btn btn-primary-custom w-100" id="btnRunAI">
+                        <i class="fas fa-play-circle me-2"></i>Chạy Thuật toán Gợi ý ngay
+                    </button>
+
+                    <hr class="my-4 text-muted">
+
+                    <h5 class="setting-title border-0 pb-0 mb-3"><i class="fas fa-server text-secondary me-2"></i>Trạng thái Website</h5>
+                    <div class="form-check form-switch mb-3">
+                        <input class="form-check-input" type="checkbox" role="switch" id="maintenanceMode">
+                        <label class="form-check-label fw-medium" for="maintenanceMode">Chế độ Bảo trì (Bảo vệ Database)</label>
+                        <div class="text-muted small mt-1">Khi bật, người dùng sẽ thấy trang thông báo bảo trì, không thể truy cập web.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="setting-card">
+                    <h5 class="setting-title"><i class="fas fa-shield-alt text-success me-2"></i>Bảo mật Tài khoản Admin</h5>
+
+                    <form id="changePasswordForm">
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Mật khẩu hiện tại <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control bg-light" id="currentPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label text-muted small fw-bold">Mật khẩu mới <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control bg-light" id="newPassword" required>
+                            <div class="form-text small">Mật khẩu phải từ 6-20 ký tự.</div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label text-muted small fw-bold">Xác nhận mật khẩu mới <span class="text-danger">*</span></label>
+                            <input type="password" class="form-control bg-light" id="confirmNewPassword" required>
+                        </div>
+
+                        <div id="passwordAlert" class="alert d-none py-2 small fw-medium"></div>
+
+                        <button type="submit" class="btn btn-dark w-100" style="border-radius: 8px; font-weight: 600;">
+                            <i class="fas fa-save me-2"></i>Đổi Mật khẩu
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-danger"><i class="fas fa-exclamation-triangle me-2"></i>Xác nhận đăng xuất</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <p class="mb-0 text-dark">Bạn có chắc chắn muốn rời khỏi trang Quản trị?</p>
+            </div>
+            <div class="modal-footer border-0 pt-0 justify-content-center gap-2">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger px-4" id="confirmLogoutBtn">Đăng xuất</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/system-settings.js"></script>
+<script src="/js/api-client.js"></script>
+</body>
+</html>

@@ -12,49 +12,26 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    // 1. GIỮ LẠI: Công cụ mã hóa mật khẩu cực kỳ quan trọng
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // 2. TỐI ƯU LẠI: Bộ lọc bảo mật
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                // 1. Tạm thời tắt CSRF để Javascript (Fetch API) có thể gửi POST request được
+                // Tắt CSRF để JWT và React/Fetch API có thể hoạt động
                 .csrf(csrf -> csrf.disable())
 
+                // MỞ TOANG HÀNG RÀO NGOÀI CÙNG
+                // Việc kiểm tra ai được vào API nào sẽ do AuthInterceptor và MaintenanceInterceptor lo!
                 .authorizeHttpRequests(authorize -> authorize
-                        // 2. CHO PHÉP TRUY CẬP GIAO DIỆN (HTML/CSS/JS)
-                        .requestMatchers(
-                                "/", "/index", "/*.html",
-                                "/login", "/signup", "/register",
-                                "/home",
-                                "/admin-dashboard", // 👈 Mở cổng cho trang Admin chuẩn bị làm
-                                "/restaurants", "/restaurant-detail/**",
-                                "/reservations", "/reservations/**",
-                                "/favourites", "/favourites/**", "/favourite/**",
-                                "/css/**", "/js/**", "/img/**"
-                                , "/manage-reservations", "/manage-reservations/**"
-                                , "/manage-users", "/manage-users/**"
-                        ).permitAll()
-
-                        // 3. CHO PHÉP TRUY CẬP API LIÊN QUAN ĐẾN TÀI KHOẢN & OTP
-                        .requestMatchers(
-                                "/api/user/login",
-                                "/api/user/register",
-                                "/api/user/verify-otp",
-                                "/api/user/send-again"
-                        ).permitAll()
-
-                        // 4. CHO PHÉP CÁC API PUBLIC KHÁC (Tạm thời mở để làm FrontEnd cho dễ)
-                        .requestMatchers("/api/restaurants/**", "/api/recommendations/**", "/api/reservations", "/api/reservations/**").permitAll()
-                        .requestMatchers("/api/user/**", "/api/reservations/users/**", "/api/user-saved/**","/api/ratings","/api/ratings").permitAll()
-
-                        // 5. CÁC ENDPOINT KHÁC ĐỀU BỊ CHẶN
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
-                // 6. TẮT TÍNH NĂNG FORM LOGIN MẶC ĐỊNH CỦA SPRING
-                // Vì chúng ta đã tự viết màn hình đăng nhập và xử lý bằng JS/API rồi
+
+                // Tắt form login mặc định của Spring
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable());
 
