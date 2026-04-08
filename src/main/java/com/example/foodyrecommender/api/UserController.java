@@ -187,6 +187,31 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
         }
     }
+    // API 3: Cập nhật thông tin cá nhân (Tên, SĐT)
+    @PutMapping("/{id}/profile")
+    public ResponseEntity<?> updateProfile(@PathVariable int id, @RequestBody Map<String, String> request) {
+        try {
+            // Lấy user hiện tại từ Database
+            User existingUser = userService.getUserById(id);
+            if (existingUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", "Không tìm thấy người dùng"));
+            }
+
+            // Chỉ cập nhật những trường được phép
+            existingUser.setFullName(request.get("fullName"));
+            existingUser.setPhone(request.get("phone"));
+
+            // Lưu lại vào DB
+            userService.updateUser(id, existingUser);
+
+            return ResponseEntity.ok(Map.of(
+                    "message", "Cập nhật thông tin thành công!",
+                    "fullName", existingUser.getFullName()
+            ));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", "Lỗi khi cập nhật thông tin"));
+        }
+    }
 
 
 }
