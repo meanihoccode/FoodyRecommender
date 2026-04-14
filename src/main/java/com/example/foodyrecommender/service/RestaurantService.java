@@ -23,6 +23,36 @@ public class RestaurantService {
     }
 
     public Restaurant createRestaurant(Restaurant restaurant) {
+        String price = restaurant.getPriceAverage();
+
+        // Kiểm tra null hoặc chuỗi rỗng
+        if (price == null || price.trim().isEmpty()) {
+            restaurant.setPriceAverage("0");
+            restaurant.setMinPrice(0);
+        } else {
+            try {
+                // Bước 1: Cắt chuỗi dựa trên dấu gạch ngang hoặc dấu gạch nối
+                // Dùng biểu thức chính quy "[-–]" để tóm được cả 2 loại dấu gạch hay dùng
+                String[] priceRanges = price.split("[-–]");
+                String minPriceStr = priceRanges[0]; // Lấy nửa đầu (VD: "150.000 ")
+
+                // Bước 2: Dùng Regex loại bỏ TẤT CẢ các ký tự KHÔNG PHẢI LÀ SỐ (Bỏ dấu chấm, chữ...)
+                // "[^0-9]" có nghĩa là: Bất cứ cái gì không nằm trong khoảng từ 0 đến 9
+                String cleanMinPrice = minPriceStr.replaceAll("[^0-9]", ""); // Kết quả: "150000"
+
+                // Bước 3: Ép kiểu thành số nguyên
+                if (!cleanMinPrice.isEmpty()) {
+                    restaurant.setMinPrice(Integer.parseInt(cleanMinPrice));
+                } else {
+                    restaurant.setMinPrice(0);
+                }
+            } catch (Exception e) {
+                // Đề phòng dữ liệu rác (VD: "Giá thương lượng"), ta set mặc định là 0 để API không bị chết
+                restaurant.setMinPrice(0);
+                System.err.println("Lỗi parse giá nhà hàng: " + price);
+            }
+        }
+
         return restaurantRepository.save(restaurant);
     }
 

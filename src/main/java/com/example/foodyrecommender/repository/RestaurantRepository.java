@@ -24,4 +24,13 @@ public interface RestaurantRepository extends JpaRepository<Restaurant,Integer> 
     @Transactional
     @Query("UPDATE Restaurant r SET r.minPrice = :minPrice WHERE r.id = :id")
     void updateMinPriceDirectly(Integer id, Integer minPrice);
+
+    /**
+     * HÀM PHỤC VỤ CHO AI RECOMMENDER (COLD-START)
+     * Ý nghĩa tên hàm:
+     * - findTop4: Lấy ra đúng 4 kết quả đứng đầu (LIMIT 4)
+     * - By: Điều kiện lọc (ở đây không có điều kiện WHERE nào, lấy toàn bộ)
+     * - OrderByRatingDesc: Sắp xếp theo cột 'rating' giảm dần (từ 5 sao xuống thấp nhất)
+     */
+    List<Restaurant> findTop4ByOrderByRatingDesc();
 }
