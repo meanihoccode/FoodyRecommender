@@ -65,6 +65,9 @@ public class Reservation {
     @Column(name = "is_rated")
     private Boolean isRated = false;
 
+    @Column(name = "notes")
+    private String notes;
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = LocalDateTime.now(); // Tự động lấy giờ hiện tại

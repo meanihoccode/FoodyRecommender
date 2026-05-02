@@ -152,6 +152,7 @@ function renderTable(reservations) {
                     <small class="text-muted">${res.bookingDate}</small>
                 </td>
                 <td><i class="fas fa-users me-2 text-muted"></i>${res.partySize} khách</td>
+                <td>${res.notes===null ? "" : res.notes}</td>
                 <td><span class="badge ${currentStatus.class}">${currentStatus.text}</span></td>
                 ${activityBtn}
             </tr>`;
@@ -300,7 +301,7 @@ async function viewReservation(id) {
             const res = await response.json();
 
             // Đổ dữ liệu lên UI Modal
-            document.getElementById('detailId').textContent = `#${res.id}`;
+            document.getElementById('detailId').textContent = `${res.id}`;
             document.getElementById('detailCustomerName').textContent = res.contactName || 'N/A';
             document.getElementById('detailCustomerPhone').textContent = res.contactPhone || 'N/A';
             document.getElementById('detailRestaurantName').textContent = res.restaurant?.name || 'Lỗi tên nhà hàng';
@@ -308,6 +309,15 @@ async function viewReservation(id) {
             document.getElementById('detailDate').textContent = res.bookingDate;
             document.getElementById('detailTime').textContent = res.bookingTime;
             document.getElementById('detailPartySize').textContent = `${res.partySize} khách`;
+
+            const notes = res.notes;
+            if (notes && notes.trim() !== "") {
+                document.getElementById('detailNotes').innerText = notes;
+                document.getElementById('detailNotes').classList.remove('text-muted');
+            } else {
+                document.getElementById('detailNotes').innerText = "Không có ghi chú từ khách hàng.";
+                document.getElementById('detailNotes').classList.add('text-muted');
+            }
 
             // Màu sắc trạng thái
             const statusConfig = {
