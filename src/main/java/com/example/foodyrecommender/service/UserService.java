@@ -200,4 +200,53 @@ public class UserService {
         userRepository.save(user);
         return user;
     }
+
+    // ==========================================
+    // HÀM XỬ LÝ QUÊN MẬT KHẨU
+    // ==========================================
+
+    public void forgotPassword(String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("Email không tồn tại trong hệ thống!");
+        }
+
+        // Tạo OTP mới (6 số)
+        String otpCode = String.format("%06d", new Random().nextInt(999999));
+        user.setOtpCode(otpCode);
+        user.setOtpGeneratedTime(LocalDateTime.now());
+
+        userRepository.save(user);
+
+        // Gửi email bằng luồng riêng (Y hệt cách bạn tối ưu ở phần Đăng ký)
+        new Thread(() -> {
+            emailService.sendOtpEmail(user.getEmail(), user.getFullName(), otpCode);
+        }).start();
+    }
+
+    public void resetPassword(String email, String otp, String newPassword) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            throw new RuntimeException("Email không tồn tại!");
+        }
+
+        // Kiểm tra mã OTP
+        if (user.getOtpCode() == null || !user.getOtpCode().equals(otp)) {
+            throw new RuntimeException("Mã OTP không chính xác!");
+        }
+
+        Duration duration = Duration.between(user.getOtpGeneratedTime(), LocalDateTime.now());
+        if (duration.toSeconds() > 150) {
+            throw new RuntimeException("Mã OTP đã hết hạn! Vui lòng yêu cầu mã mới.");
+        }
+
+        // Mã hóa mật khẩu mới và lưu lại
+        user.setPassword(passwordEncoder.encode(newPassword));
+
+        // Dọn dẹp mã OTP đi để tránh bị dùng lại
+        user.setOtpCode(null);
+        user.setOtpGeneratedTime(null);
+
+        userRepository.save(user);
+    }
 }

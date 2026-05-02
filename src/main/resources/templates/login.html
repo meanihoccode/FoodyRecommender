@@ -295,6 +295,54 @@
             </div>
         </div>
     </div>
+    <!-- Modal Quên Mật Khẩu -->
+    <div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 30px rgba(0,0,0,0.2);">
+                <div class="modal-header border-0 pb-0">
+                    <h5 class="modal-title fw-bold" style="color: var(--primary-color);">
+                        <i class="fas fa-key me-2"></i>Khôi phục mật khẩu
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body px-4 pb-4 pt-3">
+                    <p class="text-muted small mb-3">Nhập email của bạn để nhận mã xác thực khôi phục mật khẩu.</p>
+
+                    <!-- Bước 1: Nhập Email -->
+                    <div id="step1Forgot">
+                        <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="forgotEmail" placeholder="Email">
+                            <label for="forgotEmail">Email đã đăng ký</label>
+                        </div>
+                        <div id="forgotErrorMsg1" class="alert alert-danger d-none small py-2" role="alert"></div>
+                        <button type="button" id="btnSendForgotOtp" class="btn btn-login w-100">
+                            GỬI MÃ XÁC NHẬN
+                        </button>
+                    </div>
+
+                    <!-- Bước 2: Nhập OTP & Mật khẩu mới (Ban đầu ẩn đi) -->
+                    <div id="step2Forgot" class="d-none">
+                        <div class="alert alert-success small py-2 mb-3">
+                            Mã OTP đã được gửi đến <strong id="showForgotEmail"></strong>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control text-center fw-bold fs-5 tracking-widest" id="forgotOtpCode" placeholder="Nhập 6 số" maxlength="6" autocomplete="off" style="letter-spacing: 0.5rem;">
+                            <label for="forgotOtpCode" class="text-center w-100">Nhập mã OTP</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <input type="password" class="form-control text-center fw-bold fs-5 tracking-widest" id="newPassword" placeholder="Mật khẩu mới">
+                            <label for="newPassword" class="text-center w-100">Mật khẩu mới</label>
+                        </div>
+                        <div id="forgotErrorMsg2" class="alert alert-danger d-none small py-2" role="alert"></div>
+                        <div id="forgotSuccessMsg" class="alert alert-success d-none small py-2" role="alert"></div>
+                        <button type="button" id="btnResetPassword" class="btn btn-login w-100">
+                            XÁC NHẬN ĐỔI MẬT KHẨU
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/login.js?v=2"></script>
 </body>
