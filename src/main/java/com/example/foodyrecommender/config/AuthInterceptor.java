@@ -26,7 +26,7 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         // 2. CHO QUA CÁC API KHÔNG CẦN ĐĂNG NHẬP (Public APIs)
         // Lưu ý: Bạn có thể thêm các API liên quan đến quên mật khẩu vào đây nếu có
-        if (uri.contains("/login") || uri.contains("/register") || uri.contains("/verify-otp") || uri.contains("/send-again")) {
+        if (uri.contains("/login") || uri.contains("/register") || uri.contains("/verify-otp") || uri.contains("/send-again") || uri.contains("/reset-password") || uri.contains("/forgot-password")) {
             return true;
         }
 

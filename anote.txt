@@ -1,3 +1,8 @@
  .\gradlew.bat bootRun
 
  cmd /c "cd /d c:\Users\Admin\Documents\TTCS\FoodyRecommender & gradlew.bat build -x test"
+ quên mật khẩu
+ ghi chú
+ gửi mail sau khi deploy
+ có thể cho discount khi đánh giá xong
+ có thể lọc theo đánh giá

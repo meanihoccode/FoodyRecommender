@@ -174,3 +174,115 @@ async function triggerResendOtp() {
 document.getElementById('loginResendOtpBtn').addEventListener('click', function() {
     if (!this.disabled) triggerResendOtp();
 });
+
+// ==========================================
+// --- BỘ XỬ LÝ QUÊN MẬT KHẨU ---
+// ==========================================
+
+// 1. Mở popup khi bấm "Quên mật khẩu?"
+document.querySelector('.forgot-password').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Reset lại trạng thái form
+    document.getElementById('step1Forgot').classList.remove('d-none');
+    document.getElementById('step2Forgot').classList.add('d-none');
+    document.getElementById('forgotEmail').value = '';
+    document.getElementById('forgotErrorMsg1').classList.add('d-none');
+
+    const forgotModal = new bootstrap.Modal(document.getElementById('forgotPasswordModal'));
+    forgotModal.show();
+});
+
+// 2. Xử lý nút Gửi mã OTP
+document.getElementById('btnSendForgotOtp').addEventListener('click', async function() {
+    const email = document.getElementById('forgotEmail').value.trim();
+    const btn = this;
+    const errorMsg = document.getElementById('forgotErrorMsg1');
+
+    if (!email) {
+        errorMsg.textContent = "Vui lòng nhập email!";
+        errorMsg.classList.remove('d-none');
+        return;
+    }
+
+    errorMsg.classList.add('d-none');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Đang gửi...`;
+
+    try {
+        // GỌI API GỬI OTP QUÊN MẬT KHẨU
+        const response = await fetch(`/api/user/forgot-password?email=${encodeURIComponent(email)}`, {
+            method: 'POST'
+        });
+
+        if (response.ok) {
+            // Chuyển sang bước 2
+            document.getElementById('step1Forgot').classList.add('d-none');
+            document.getElementById('step2Forgot').classList.remove('d-none');
+            document.getElementById('showForgotEmail').textContent = email;
+        } else {
+            const data = await response.json();
+            errorMsg.textContent = data.message || "Không tìm thấy email này trong hệ thống.";
+            errorMsg.classList.remove('d-none');
+        }
+    } catch (err) {
+        errorMsg.textContent = "Lỗi kết nối máy chủ!";
+        errorMsg.classList.remove('d-none');
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `GỬI MÃ XÁC NHẬN`;
+    }
+});
+
+// 3. Xử lý nút Xác nhận đổi mật khẩu
+document.getElementById('btnResetPassword').addEventListener('click', async function() {
+    const email = document.getElementById('forgotEmail').value.trim();
+    const otp = document.getElementById('forgotOtpCode').value.trim();
+    const newPassword = document.getElementById('newPassword').value;
+    const btn = this;
+    const errorMsg = document.getElementById('forgotErrorMsg2');
+    const successMsg = document.getElementById('forgotSuccessMsg');
+
+    if (otp.length !== 6 || !newPassword) {
+        errorMsg.textContent = "Vui lòng nhập đủ OTP và mật khẩu mới!";
+        errorMsg.classList.remove('d-none');
+        return;
+    }
+
+    errorMsg.classList.add('d-none');
+    btn.disabled = true;
+    btn.innerHTML = `<span class="spinner-border spinner-border-sm"></span> Đang xử lý...`;
+
+    try {
+        // GỌI API ĐỔI MẬT KHẨU
+        const response = await fetch("/api/user/reset-password", {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: email, otp: otp, newPassword: newPassword })
+        });
+
+        if (response.ok) {
+            successMsg.textContent = "Đổi mật khẩu thành công! Vui lòng đăng nhập lại.";
+            successMsg.classList.remove('d-none');
+
+            setTimeout(() => {
+                const modal = bootstrap.Modal.getInstance(document.getElementById('forgotPasswordModal'));
+                modal.hide();
+                // Tự động điền email vào form đăng nhập chính
+                document.getElementById('email').value = email;
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }, 2000);
+        } else {
+            const data = await response.json();
+            errorMsg.textContent = data.message || "Mã OTP không chính xác hoặc đã hết hạn!";
+            errorMsg.classList.remove('d-none');
+            btn.disabled = false;
+            btn.innerHTML = `XÁC NHẬN ĐỔI MẬT KHẨU`;
+        }
+    } catch (err) {
+        errorMsg.textContent = "Lỗi kết nối máy chủ!";
+        errorMsg.classList.remove('d-none');
+        btn.disabled = false;
+        btn.innerHTML = `XÁC NHẬN ĐỔI MẬT KHẨU`;
+    }
+});

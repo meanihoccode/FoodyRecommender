@@ -213,6 +213,31 @@ public class UserController {
         }
     }
 
+    // Bước 1: Gửi mã OTP khôi phục về Email
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+        try {
+            userService.forgotPassword(email);
+            return ResponseEntity.ok(Map.of("message", "Đã gửi mã OTP khôi phục đến email của bạn!"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        }
+    }
+
+    // Bước 2: Xác nhận OTP và lưu mật khẩu mới
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        String otp = request.get("otp");
+        String newPassword = request.get("newPassword");
+
+        try {
+            userService.resetPassword(email, otp, newPassword);
+            return ResponseEntity.ok(Map.of("message", "Khôi phục mật khẩu thành công!"));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message", e.getMessage()));
+        }
+    }
 
 }
 
