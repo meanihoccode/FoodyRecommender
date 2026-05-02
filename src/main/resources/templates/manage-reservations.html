@@ -299,11 +299,12 @@
                     <thead class="table-light">
                     <tr>
                         <th style="width: 8%">Mã Đơn</th>
-                        <th style="width: 20%">Khách Hàng</th>
+                        <th style="width: 12%">Khách Hàng</th>
                         <th style="width: 20%">Nhà Hàng</th>
-                        <th style="width: 15%">Thời Gian</th>
+                        <th style="width: 12%">Thời Gian</th>
                         <th style="width: 10%">Số lượng</th>
-                        <th style="width: 15%">Trạng thái</th>
+                        <th style="width: 14%">Ghi chú</th>
+                        <th style="width: 12%">Trạng thái</th>
                         <th style="width: 12%" class="text-center">Thao tác</th>
                     </tr>
                     </thead>
@@ -330,52 +331,90 @@
     </div>
 </div>
     <div class="modal fade" id="viewReservationModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content" style="border-radius: 16px; border: none;">
-                <div class="modal-header border-bottom-0 pb-0">
-                    <h5 class="modal-title fw-bold" style="color: var(--primary-color);">
-                        <i class="fas fa-info-circle me-2"></i>Chi tiết Đơn <span id="detailId"></span>
-                    </h5>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow-lg" style="border-radius: 20px; border: none; overflow: hidden;">
+
+            <!-- Header: Tiêu đề & Trạng thái -->
+            <div class="modal-header border-bottom-0 bg-light pb-3 pt-4 px-4 d-flex align-items-center">
+                <h5 class="modal-title fw-bold" style="color: var(--primary-color);">
+                    <i class="fas fa-receipt me-2"></i>Chi tiết Đơn #<span id="detailId"></span>
+                </h5>
+
+                <div class="ms-auto d-flex align-items-center">
+                    <span id="detailStatus" class="badge rounded-pill fs-6 px-4 py-2 me-2" style="margin-right: 55px">
+                        Đang tải...
+                    </span>
+
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body py-4">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            <small class="text-muted d-block">Khách hàng</small>
-                            <strong id="detailCustomerName" class="text-dark">Đang tải...</strong>
+            </div>
+
+            <div class="modal-body px-4 py-3">
+                <!-- KHỐI 1: Thông tin Nhà hàng (Highlight nổi bật) -->
+                <div class="p-3 mb-4 rounded-3" style="background-color: rgba(238, 77, 45, 0.05); border-left: 4px solid var(--primary-color);">
+                    <small class="text-muted text-uppercase fw-bold" style="font-size: 0.75rem; letter-spacing: 0.5px;">
+                        <i class="fas fa-store me-1"></i> Nhà hàng
+                    </small>
+                    <strong id="detailRestaurantName" class="text-dark fs-5 d-block mt-1">Đang tải...</strong>
+                    <span id="detailRestaurantAddress" class="text-muted small">
+                        <i class="fas fa-map-marker-alt me-1 text-danger"></i>Đang tải...
+                    </span>
+                </div>
+
+                <!-- KHỐI 2: Thông tin Khách hàng -->
+                <div class="row g-3 mb-4">
+                    <div class="col-6">
+                        <div class="p-2 border rounded-3 h-100 bg-light">
+                            <small class="text-muted d-block mb-1"><i class="fas fa-user me-2 text-secondary"></i>Khách hàng</small>
+                            <strong id="detailCustomerName" class="text-dark d-block text-truncate">Đang tải...</strong>
                         </div>
-                        <div class="col-6">
-                            <small class="text-muted d-block">Số điện thoại</small>
-                            <strong id="detailCustomerPhone" class="text-dark">Đang tải...</strong>
-                        </div>
-                        <div class="col-12">
-                            <small class="text-muted d-block">Nhà hàng</small>
-                            <strong id="detailRestaurantName" class="text-primary fs-5 d-block">Đang tải...</strong>
-                            <span id="detailRestaurantAddress" class="text-muted small">Đang tải...</span>
-                        </div>
-                        <div class="col-4">
-                            <small class="text-muted d-block">Ngày đặt</small>
-                            <strong id="detailDate" class="text-dark">Đang tải...</strong>
-                        </div>
-                        <div class="col-4">
-                            <small class="text-muted d-block">Giờ đặt</small>
-                            <strong id="detailTime" class="text-dark">Đang tải...</strong>
-                        </div>
-                        <div class="col-4">
-                            <small class="text-muted d-block">Số người</small>
-                            <strong id="detailPartySize" class="text-dark">Đang tải...</strong>
-                        </div>
-                        <div class="col-12 mt-3 text-center">
-                            <span id="detailStatus" class="badge fs-6 px-3 py-2">Đang tải...</span>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2 border rounded-3 h-100 bg-light">
+                            <small class="text-muted d-block mb-1"><i class="fas fa-phone-alt me-2 text-secondary"></i>Số điện thoại</small>
+                            <strong id="detailCustomerPhone" class="text-dark d-block">Đang tải...</strong>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer border-top-0 pt-0 justify-content-center">
-                    <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal" style="border-radius: 8px;">Đóng</button>
+
+                <!-- KHỐI 3: Thời gian & Số lượng -->
+                <div class="row g-2 mb-4 text-center">
+                    <div class="col-4">
+                        <div class="p-2 border rounded-3 h-100 shadow-sm">
+                            <small class="text-muted d-block mb-2"><i class="far fa-calendar-alt text-primary fs-5"></i></small>
+                            <strong id="detailDate" class="text-dark small d-block">--/--/----</strong>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-2 border rounded-3 h-100 shadow-sm">
+                            <small class="text-muted d-block mb-2"><i class="far fa-clock text-warning fs-5"></i></small>
+                            <strong id="detailTime" class="text-dark small d-block">--:--</strong>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="p-2 border rounded-3 h-100 shadow-sm">
+                            <small class="text-muted d-block mb-2"><i class="fas fa-user-friends text-info fs-5"></i></small>
+                            <strong id="detailPartySize" class="text-dark small d-block">- người</strong>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- KHỐI 4: Ghi chú của khách (MỚI THÊM) -->
+                <div class="p-3 border rounded-3" style="background-color: #f8f9fa;">
+                    <small class="text-muted d-block mb-2 fw-bold">
+                        <i class="fas fa-comment-dots me-2 text-secondary"></i>Ghi chú
+                    </small>
+                    <p id="detailNotes" class="mb-0 text-dark fst-italic" style="font-size: 0.95rem;">Không có ghi chú.</p>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="modal-footer border-top-0 pt-0 pb-4 justify-content-center">
+                <button type="button" class="btn btn-secondary px-5 py-2 fw-bold" data-bs-dismiss="modal" style="border-radius: 10px; transition: all 0.3s;">Đóng lại</button>
             </div>
         </div>
     </div>
+</div>
 
     <div class="modal fade" id="addReservationModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered modal-lg">

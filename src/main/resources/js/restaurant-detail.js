@@ -174,6 +174,8 @@ bookingForm.addEventListener('submit', async function (event) {
         });
 
         if (response.ok) {
+            const savedData = await response.json();
+            document.getElementById("bookingCode").innerHTML = "RES" + savedData.id;
             const successModal = new bootstrap.Modal(document.getElementById('successModal'));
             successModal.show();
             // Tùy chọn: Xóa trắng form sau khi đặt thành công
